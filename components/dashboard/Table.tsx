@@ -18,7 +18,7 @@ const TableComponent = ({
   columns: Columns[]
   title: string
   description: string
-  renderRow: (item: any) => React.ReactNode
+  renderRow: (item: Orders) => React.ReactNode
   data: Orders[]
 }) => {
   return (
