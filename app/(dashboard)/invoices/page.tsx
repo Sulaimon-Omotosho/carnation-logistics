@@ -1,10 +1,12 @@
 // import Orders from '@/components/dashboard/Orders'
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { invoiceColumns, orders } from '@/constants'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { CirclePlus } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -69,7 +71,7 @@ const InvoicesPage = () => {
   )
 
   return (
-    <div className=''>
+    <div className='relative'>
       <TableComponent
         title='Invoices'
         description='Recent Invoices'
@@ -77,6 +79,13 @@ const InvoicesPage = () => {
         renderRow={renderRow}
         data={orders}
       />
+      <div className='absolute top-7 right-5 md:right-12'>
+        <Button className='inline-flex gap-2' variant={'ghost'} asChild>
+          <Link href='/invoices/new'>
+            <CirclePlus className='h-4 w-4' /> Create Invoice
+          </Link>
+        </Button>
+      </div>
     </div>
   )
 }

@@ -12,7 +12,7 @@ const data = [
 
 const Performance = () => {
   return (
-    <div className='bg-white p-4 rounded-md h-80 relative'>
+    <div className='bg-white dark:bg-slate-700 p-4 rounded-md h-80 relative'>
       <div className='flex items-center justify-between'>
         <h1 className='text-xl font-semibold'>Invoice Performance</h1>
         <Ellipsis />
