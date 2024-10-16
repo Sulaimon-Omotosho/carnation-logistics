@@ -1,3 +1,4 @@
+import Footer from '@/components/Footer'
 import Sidebar from '@/components/Sidebar'
 import { Forklift } from 'lucide-react'
 import Link from 'next/link'
@@ -21,8 +22,11 @@ export default function DasboardLayout({
       </div>
 
       {/* RIGHT  */}
-      <div className='w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#F7F8FA] dark:bg-[#121825] overflow-scroll flex flex-col justify-center lg:px-4 remove-scrollbar'>
-        {children}
+      <div className='w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] '>
+        <div className='bg-[#F7F8FA] dark:bg-[#121825] overflow-scroll flex flex-col justify-center lg:px-4 remove-scrollbar'>
+          {children}
+        </div>
+        <Footer />
       </div>
     </div>
   )

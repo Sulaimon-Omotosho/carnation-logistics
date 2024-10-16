@@ -462,3 +462,90 @@ export const users = [
     image: 'https://images.pexels.com/photos/428339/pexels-photo-428339.jpeg',
   },
 ]
+
+export const invoiceColumns = [
+  {
+    header: 'Customer',
+    accessor: 'customer',
+  },
+  {
+    header: 'Product',
+    accessor: 'product',
+    className: 'hidden sm:table-cell',
+  },
+  {
+    header: 'Status',
+    accessor: 'status',
+    className: 'hidden sm:table-cell',
+  },
+  {
+    header: 'Date',
+    accessor: 'date',
+    className: 'hidden sm:table-cell',
+  },
+  {
+    header: 'Amount',
+    accessor: 'amount',
+    className: 'text-right',
+  },
+]
+
+export const usersColumns = [
+  {
+    header: 'User',
+    accessor: 'user',
+  },
+  {
+    header: 'Phone Number',
+    accessor: 'phone',
+    className: 'hidden sm:table-cell',
+  },
+  {
+    header: 'Role',
+    accessor: 'role',
+    className: 'hidden sm:table-cell',
+  },
+  {
+    header: 'Position',
+    accessor: 'position',
+    className: 'hidden sm:table-cell',
+  },
+  {
+    header: 'User Id',
+    accessor: 'userId',
+    className: 'text-right',
+  },
+]
+
+export const singleOrder = [
+  {
+    name: 'Liam Johnson',
+    company: 'Peak Milk',
+    email: 'liam.johnson@peakmilk.com',
+    phone: '09023456789',
+    product: 'Lagos - Abuja',
+    status: 'fulfilled',
+    date: '2023-06-23',
+    description: 'Carrying 30 packs of loaded peak milk to abuja only',
+    amount: 1500000.0,
+  },
+]
+
+export const statuses = [
+  {
+    id: 'pending',
+    label: 'Pending',
+  },
+  {
+    id: 'inProgress',
+    label: 'In Progress',
+  },
+  {
+    id: 'fulfilled',
+    label: 'Fulfilled',
+  },
+  {
+    id: 'cancelled',
+    label: 'Cancelled',
+  },
+]

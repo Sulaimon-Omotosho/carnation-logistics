@@ -14,7 +14,7 @@ const OrderCalendar = () => {
   const [value, onChange] = useState<Value>(new Date())
 
   return (
-    <div className=' p-4 rounded-md flex-col max-h-screen min-h-screen'>
+    <div className=' p-4 rounded-md flex-col max-h-[calc(100vh-56px)] min-h-[calc(100vh-56px)]'>
       <Calendar onChange={onChange} value={value} />
       <div className='lg:flex items-center justify-between hidden'>
         <h1 className='text-xl font-semibold my-4'>Bookings</h1>
