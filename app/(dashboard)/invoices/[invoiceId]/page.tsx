@@ -20,7 +20,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   }
 
   return (
-    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-24 pt-20'>
+    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-20'>
       <div className='flex justify-between mb-8'>
         <h1 className='flex items-center gap-4 text-3xl font-bold'>
           Invoice #{invoiceId}

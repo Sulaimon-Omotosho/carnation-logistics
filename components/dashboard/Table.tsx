@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '../ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
-import { Columns } from '@/lib/types'
+import { Columns, Orders } from '@/lib/types'
 
 const TableComponent = ({
   title,
@@ -19,7 +19,7 @@ const TableComponent = ({
   title: string
   description: string
   renderRow: (item: any) => React.ReactNode
-  data: any[]
+  data: Orders[]
 }) => {
   return (
     <Card className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] overflow-hidden'>
