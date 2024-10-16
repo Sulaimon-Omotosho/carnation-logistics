@@ -35,4 +35,6 @@ export interface SingleOrder {
   date: string
   description: string
   amount: number
+  paymentVerified?: string
+  deliveryVerified?: string
 }

@@ -14,7 +14,7 @@ const UsersPage = () => {
   const renderRow = (items: Users) => (
     <TableRow>
       <TableCell className=' p-0'>
-        <Link href={`/invoices/${userId}`} className='p-4 flex gap-4'>
+        <Link href={`/users/${userId}`} className='p-4 flex gap-4'>
           <Image
             src={items.image}
             height={100}
@@ -31,12 +31,12 @@ const UsersPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/invoices/${userId}`} className='block p-4'>
+        <Link href={`/users/${userId}`} className='block p-4'>
           {items.phone}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/invoices/${userId}`} className='block p-4'>
+        <Link href={`/users/${userId}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
               'bg-yellow-500': items.role === 'user',
@@ -52,12 +52,12 @@ const UsersPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/invoices/${userId}`} className='block p-4'>
+        <Link href={`/users/${userId}`} className='block p-4'>
           {items.position}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/invoices/${userId}`} className='block p-4'>
+        <Link href={`/users/${userId}`} className='block p-4'>
           {items.userId}
         </Link>
       </TableCell>

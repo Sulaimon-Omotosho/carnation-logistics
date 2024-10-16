@@ -13,24 +13,26 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
     email: 'liam.johnson@peakmilk.com',
     phone: '09023456789',
     product: 'Lagos - Abuja',
-    status: 'fulfilled',
+    status: 'Fulfilled',
     date: '2023-06-23',
     description: 'Delivery of goods from Lagos to Abuja',
     amount: 1500000.0,
+    paymentVerified: '7639745',
+    deliveryVerified: '7639745',
   }
 
   return (
-    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-20'>
+    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-10 md:pt-20'>
       <div className='flex justify-between mb-8'>
-        <h1 className='flex items-center gap-4 text-3xl font-bold'>
+        <h1 className='flex flex-col lg:flex-row lg:items-center gap-4 text-3xl font-bold'>
           Invoice #{invoiceId}
           <Badge
             className={cn(
-              'rounded-full capitalize',
-              invoice.status === 'inProgress' && 'bg-blue-500',
-              invoice.status === 'fulfilled' && 'bg-green-600',
-              invoice.status === 'pending' && 'bg-zinc-700',
-              invoice.status === 'cancelled' && 'bg-red-600'
+              'rounded-full capitalize w-fit',
+              invoice.status === 'In Progress' && 'bg-yellow-500',
+              invoice.status === 'Fulfilled' && 'bg-green-600',
+              invoice.status === 'Pending' && 'bg-blue-600',
+              invoice.status === 'Cancelled' && 'bg-red-600'
             )}
           >
             {invoice.status}
@@ -42,14 +44,14 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
         </div>
       </div>
       <p className='text-3xl mb-3'>
-        <span>N</span>
+        <span className=' font-extrabold'>N</span>
         {invoice.amount.toLocaleString('en-US', {
           minimumFractionDigits: 2,
         })}{' '}
       </p>
       <p className='text-lg mb-8'>{invoice.description} </p>
       <h2 className='font-bold text-lg mb-4'>Billing Details</h2>
-      <ul className='grid gap-2'>
+      <ul className='grid gap-2 mb-4'>
         <li className='flex gap-4'>
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
             Invoice ID
@@ -64,15 +66,48 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
         </li>
         <li className='flex gap-4'>
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
-            Billing Name
+            Billing Company
           </strong>
           <span>{invoice.company} </span>
+        </li>
+        <li className='flex gap-4'>
+          <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+            Billing Name
+          </strong>
+          <span>{invoice.name} </span>
         </li>
         <li className='flex gap-4'>
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
             Billing Email
           </strong>
           <span>{invoice.email} </span>
+        </li>
+        <li className='flex gap-4'>
+          <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+            Billing Phone
+          </strong>
+          <span>{invoice.phone} </span>
+        </li>
+        <li className='flex gap-4'>
+          <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+            Billing Product
+          </strong>
+          <span>{invoice.product} </span>
+        </li>
+      </ul>
+      <h2 className='font-bold text-lg mb-4'>Verification Details</h2>
+      <ul className='grid gap-2'>
+        <li className='flex gap-4'>
+          <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+            Payment Verified
+          </strong>
+          <span>{invoice.paymentVerified} </span>
+        </li>
+        <li className='flex gap-4'>
+          <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+            Delivery Verified
+          </strong>
+          <span>{invoice.deliveryVerified} </span>
         </li>
       </ul>
     </main>

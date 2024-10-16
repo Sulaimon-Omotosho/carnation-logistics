@@ -528,6 +528,8 @@ export const singleOrder = [
     date: '2023-06-23',
     description: 'Carrying 30 packs of loaded peak milk to abuja only',
     amount: 1500000.0,
+    paymentVerified: '7639745',
+    deliveryVerified: '7639745',
   },
 ]
 
