@@ -15,9 +15,9 @@ const CalculatorForm = () => {
   const form = useForm<z.infer<typeof calculatorVal>>({
     resolver: zodResolver(calculatorVal),
     defaultValues: {
-      distance: 0,
-      fuel: 0,
-      miscellaneous: 0,
+      // distance: ,
+      // fuel: 0,
+      // miscellaneous: 0,
     },
   })
 

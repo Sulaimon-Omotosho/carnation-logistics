@@ -19,7 +19,6 @@ const CreateInvoiceForm = () => {
       email: '',
       phone: '',
       description: '',
-      amount: 0,
     },
   })
 
