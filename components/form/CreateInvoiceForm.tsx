@@ -8,6 +8,7 @@ import { createInvoice } from '@/lib/validation'
 import { z } from 'zod'
 import CustomFormField from './CustomFormField'
 import { FormFieldType } from '@/lib/types'
+import SubmitButton from '../SubmitButton'
 
 const CreateInvoiceForm = () => {
   const [error, setError] = useState('')
@@ -17,6 +18,7 @@ const CreateInvoiceForm = () => {
     defaultValues: {
       email: '',
       phone: '',
+      description: '',
     },
   })
 
@@ -80,8 +82,18 @@ const CreateInvoiceForm = () => {
             name='phone'
             label='Billing Phone'
             placeholder='Phone'
-            iconSrc=''
-            iconAlt='phone'
+          />
+          {error && (
+            <p className='text-red-500 text-center absolute pl-10'>{error}</p>
+          )}
+        </div>
+        <div className='relative'>
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name='address'
+            label='Address'
+            placeholder='Delivery Address'
           />
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
@@ -96,6 +108,17 @@ const CreateInvoiceForm = () => {
             placeholder='From & To'
             iconSrc=''
             iconAlt='email'
+          />
+          {error && (
+            <p className='text-red-500 text-center absolute pl-10'>{error}</p>
+          )}
+        </div>
+        <div className='relative'>
+          <CustomFormField
+            fieldType={FormFieldType.DATE_PICKER}
+            control={form.control}
+            name='date'
+            label='Delivery Date'
           />
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
@@ -128,6 +151,10 @@ const CreateInvoiceForm = () => {
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
           )}
+        </div>
+
+        <div className=''>
+          <SubmitButton>Create Invoice</SubmitButton>
         </div>
       </form>
     </Form>

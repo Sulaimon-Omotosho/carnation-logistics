@@ -20,9 +20,7 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from '../ui/select'
 import { Textarea } from '../ui/textarea'
 import { Checkbox } from '../ui/checkbox'
 import { FormFieldType } from '@/lib/types'
-import { Button } from '../ui/button'
-import { Eye, EyeClosed } from 'lucide-react'
-import { useState } from 'react'
+import { Calendar } from 'lucide-react'
 
 // export enum FormFieldType {
 //   INPUT = 'input',
@@ -39,6 +37,7 @@ interface CustomProps {
   fieldType: FormFieldType
   name: string
   label?: string
+  type?: string
   placeholder?: string
   iconSrc?: string
   iconAlt?: string
@@ -54,14 +53,12 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
     fieldType,
     iconSrc,
     iconAlt,
+    type,
     placeholder,
     showTimeSelect,
     dateFormat,
     renderSkeleton,
   } = props
-
-  // console.log('Field name:', props.name)
-  // console.log('Field value:', field.value)
 
   switch (fieldType) {
     case FormFieldType.INPUT:
@@ -86,11 +83,6 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         </div>
       )
     case FormFieldType.PASSWORD:
-      // const [showPassword, setShowPassword] = useState(true)
-
-      // const togglePassword = () => {
-      //   setShowPassword(!showPassword)
-      // }
       return (
         <div className='flex rounded-md border border-dark-500'>
           {iconSrc && (
@@ -104,25 +96,13 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           )}
           <FormControl>
             <Input
-              // type={showPassword ? 'text' : 'password'}
-              type='password'
+              type={type}
               required
               placeholder={placeholder}
               {...field}
               className='shad-input border-0'
             />
           </FormControl>
-          {/* <div
-            // variant={'ghost'}
-            // onClick={togglePassword}
-            className='ml-2'
-          >
-            {showPassword ? (
-              <Eye className='h-5 w-5 text-gray-500' />
-            ) : (
-              <EyeClosed className='h-5 w-5 text-gray-500' />
-            )}
-          </div> */}
         </div>
       )
 
@@ -142,14 +122,8 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       )
     case FormFieldType.DATE_PICKER:
       return (
-        <div className='flex rounded-md border border-dark-500'>
-          <Image
-            src='/assets/icons/calendar.svg'
-            height={24}
-            width={24}
-            alt='calendar'
-            className='ml-2'
-          />
+        <div className='pl-7 relative rounded-md border border-dark-500'>
+          <Calendar className='absolute top-2.5 left-2' />
           <FormControl>
             <DatePicker
               selected={field.value}

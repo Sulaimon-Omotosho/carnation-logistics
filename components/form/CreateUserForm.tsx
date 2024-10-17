@@ -11,17 +11,25 @@ import SubmitButton from '../SubmitButton'
 import { Form } from '../ui/form'
 import { roles } from '@/constants'
 import { SelectItem } from '../ui/select'
+import { Button } from '../ui/button'
+import { Eye, EyeClosed } from 'lucide-react'
 
 const CreateUserForm = () => {
   const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(true)
 
   const form = useForm<z.infer<typeof createUser>>({
     resolver: zodResolver(createUser),
     defaultValues: {
       email: '',
       password: '',
+      notes: '',
     },
   })
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword)
+  }
 
   const onSubmit = (data: z.infer<typeof createUser>) => {
     console.log('Form data:', data)
@@ -80,12 +88,24 @@ const CreateUserForm = () => {
           <CustomFormField
             fieldType={FormFieldType.PASSWORD}
             control={form.control}
+            type={showPassword ? 'password' : 'text'}
             name='password'
             label='Password'
             placeholder='Password'
             iconSrc=''
             iconAlt='password'
           />
+          <Button
+            variant={'ghost'}
+            onClick={togglePassword}
+            className='absolute top-9 right-3'
+          >
+            {showPassword ? (
+              <EyeClosed className='h-5 w-5 text-gray-500' />
+            ) : (
+              <Eye className='h-5 w-5 text-gray-500' />
+            )}
+          </Button>
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
           )}
@@ -147,9 +167,7 @@ const CreateUserForm = () => {
             control={form.control}
             name='notes'
             label='Notes'
-            placeholder='Notes'
-            iconSrc=''
-            iconAlt='notes'
+            placeholder='Notes...'
           />
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>

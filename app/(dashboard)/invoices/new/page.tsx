@@ -9,8 +9,8 @@ import SubmitButton from '@/components/SubmitButton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import PriceCalculator from '@/components/PriceCalculator'
 import FormModal from '@/components/dashboard/FormModal'
+import CreateInvoiceForm from '@/components/form/CreateInvoiceForm'
 
 const NewInvoicePage = () => {
   const [state, setState] = useState('ready')
@@ -31,7 +31,7 @@ const NewInvoicePage = () => {
           <FormModal />
         </div>
 
-        <form
+        {/* <form
           action=''
           onSubmit={handleOnSubmit}
           className='grid gap-4 max-w-xs'
@@ -84,7 +84,8 @@ const NewInvoicePage = () => {
           <div className='pb-5'>
             <SubmitButton />
           </div>
-        </form>
+        </form> */}
+        <CreateInvoiceForm />
       </div>
     </main>
   )

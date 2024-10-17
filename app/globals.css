@@ -177,14 +177,14 @@
 }
 
 .react-datepicker__input-container input {
-  background-color: #1a1d21 !important;
+  background-color: transparent !important;
   width: 100%;
   outline: none;
 }
 
 .react-datepicker__day--selected {
   background-color: #24ae7c !important;
-  color: #ffffff !important;
+  /* color: #ffffff !important; */
   border-radius: 4px;
 }
 

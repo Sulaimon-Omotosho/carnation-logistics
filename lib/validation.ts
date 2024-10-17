@@ -9,6 +9,7 @@ export const createUser = z.object({
     .max(50, 'Name must be at most 50 characters'),
   phone: z
     .string()
+    .min(14, 'Invalid phone number')
     .refine((phone) => /^\+\d{10,15}$/.test(phone), 'Invalid phone number'),
   email: z.string().email('Invalid email address'),
   password: z
@@ -20,6 +21,7 @@ export const createUser = z.object({
     errorMap: () => ({ message: 'You must pick a Role' }),
   }),
   address: z.string(),
+  notes: z.string().optional(),
 })
 
 export const createInvoice = z.object({
@@ -27,14 +29,15 @@ export const createInvoice = z.object({
     .string()
     .min(5, 'Name must be at least 5 characters')
     .max(50, 'Name must be at most 50 characters'),
+  company: z.string().min(5, 'Add Company name'),
+  email: z.string().email('Invalid email address'),
   phone: z
     .string()
+    .min(14, 'Invalid phone number')
     .refine((phone) => /^\+\d{10,15}$/.test(phone), 'Invalid phone number'),
-  email: z.string().email('Invalid email address'),
   address: z.string().min(20, 'add delivery address'),
-  company: z.string().min(5, 'Add Company name'),
-  product: z.string().min(6, 'Add delivery state to and fro'),
-  date: z.string().min(5, 'Add date of delivery').date(),
-  amount: z.number().min(5, 'Add amount'),
+  product: z.string().min(6, 'Add delivery states to and fro'),
+  date: z.coerce.date(),
+  amount: z.string().min(5, 'Add amount'),
   description: z.string().min(10, 'Description must be added'),
 })
