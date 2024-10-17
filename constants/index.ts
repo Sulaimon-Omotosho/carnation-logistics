@@ -551,3 +551,18 @@ export const statuses = [
     label: 'Cancelled',
   },
 ]
+
+export const roles = [
+  {
+    id: 'ADMIN',
+    label: 'Admin',
+  },
+  {
+    id: 'SUPERVISOR',
+    label: 'Supervisor',
+  },
+  {
+    id: 'USER',
+    label: 'User',
+  },
+]

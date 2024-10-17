@@ -10,7 +10,7 @@ export default function DasboardLayout({
   return (
     <div className='h-screen flex remove-scrollbar'>
       {/* LEFT  */}
-      <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] remove-scrollbar overflow-hidden '>
+      <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] remove-scrollbar overflow-hidden'>
         <Link
           href='/'
           className='flex items-center justify-center lg:justify-start gap-2  px-5 pt-4'
@@ -23,7 +23,7 @@ export default function DasboardLayout({
 
       {/* RIGHT  */}
       <div className='w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] '>
-        <div className='bg-[#F7F8FA] dark:bg-[#121825] overflow-scroll flex flex-col justify-center lg:px-4 remove-scrollbar'>
+        <div className='bg-[#F7F8FA] dark:bg-[#121825] overflow-hidden flex flex-col justify-center lg:px-4 remove-scrollbar min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] '>
           {children}
         </div>
         <Footer />

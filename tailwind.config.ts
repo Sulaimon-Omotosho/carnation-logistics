@@ -10,6 +10,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        dark: {
+          200: '#0D0F10',
+          300: '#131619',
+          400: '#1A1D21',
+          500: '#363A3D',
+          600: '#76828D',
+          700: '#ABB8C4',
+        },
         susuSky: '#C3EBFA',
         susuSkyLight: '#EDF9FD',
         susuPurple: '#CFCEFF',
@@ -65,5 +73,6 @@ const config: Config = {
     },
   },
   plugins: [require('tailwindcss-animate')],
-}
+} satisfies Config
+
 export default config

@@ -65,7 +65,7 @@ const UserPage = () => {
   )
 
   return (
-    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] p-2 lg:p-4 flex flex-col lg:flex-row lg:gap-4'>
+    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] overflow-scroll remove-scrollbar p-2 lg:p-4 flex flex-col lg:flex-row lg:gap-4'>
       {/* LEFT  */}
       <div className='w-full xl:w-2/3'>
         {/* TOP  */}

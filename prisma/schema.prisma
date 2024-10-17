@@ -1,0 +1,65 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  ADMIN
+  SUPERVISOR
+  USER
+}
+
+enum status {
+  PENDING
+  IN_PROGRESS
+  FULFILLED
+  CANCELLED
+}
+
+model Invoice {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug     String    @unique
+  name    String
+  company     String
+  email     String
+  phone     String
+  product     String
+  status status @default(PENDING)
+  createdBy   User      @relation(fields: [creatorId], references: [id])
+  creatorId String    @db.ObjectId
+}
+
+model User {
+  id      String   @id @default(uuid()) @map("_id") @db.ObjectId
+  email   String?   @unique
+  name    String?
+  phone    String? @unique
+  hashedPassword String?
+  position    String?
+  image String?
+  role UserRole? @default(USER)
+  address String?
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoice   Invoice[]
+}
+
+// model Comment {
+//   id      String @id @default(auto()) @map("_id") @db.ObjectId
+//   comment String
+//   invoice    Invoice   @relation(fields: [postId], references: [id])
+//   postId  String @db.ObjectId
+// }
+
+// Address is an embedded document
+// type Address {
+//   street String
+//   city   String
+//   state  String
+//   zip    String
+// }

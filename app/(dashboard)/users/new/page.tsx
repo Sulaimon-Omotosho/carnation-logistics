@@ -9,10 +9,10 @@ import SubmitButton from '@/components/SubmitButton'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import PriceCalculator from '@/components/PriceCalculator'
-import FormModal from '@/components/dashboard/FormModal'
+import RoleMenu from '@/components/dashboard/RoleMenu'
+import CreateUserForm from '@/components/form/CreateUserForm'
 
-const NewInvoicePage = () => {
+const NewUserPage = () => {
   const [state, setState] = useState('ready')
 
   async function handleOnSubmit(event: SyntheticEvent) {
@@ -27,10 +27,9 @@ const NewInvoicePage = () => {
     <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-4 md:px-10 lg:px-36 pt-10 overflow-scroll remove-scrollbar'>
       <div className='w-full'>
         <div className='flex justify-between mb-6'>
-          <h1 className='text-3xl font-bold'>Create Invoice</h1>
-          <FormModal />
+          <h1 className='text-3xl font-bold'>Create User</h1>
         </div>
-
+        {/* 
         <form
           action=''
           onSubmit={handleOnSubmit}
@@ -38,56 +37,51 @@ const NewInvoicePage = () => {
         >
           <div className=''>
             <Label htmlFor='name' className='block mb-2 font-semibold text-sm'>
-              Billing Name
+              Name
             </Label>
             <Input id='name' name='name' type='text' />
           </div>
           <div className=''>
-            <Label htmlFor='name' className='block mb-2 font-semibold text-sm'>
-              Billing Company
-            </Label>
-            <Input id='company' name='company' type='text' />
-          </div>
-          <div className=''>
-            <Label htmlFor='email' className='block mb-2 font-semibold text-sm'>
-              Billing Email
-            </Label>
-            <Input id='email' name='email' type='email' />
-          </div>
-          <div className=''>
-            <Label htmlFor='email' className='block mb-2 font-semibold text-sm'>
-              Billing Phone
+            <Label htmlFor='phone' className='block mb-2 font-semibold text-sm'>
+              Phone
             </Label>
             <Input id='phone' name='phone' type='text' />
           </div>
           <div className=''>
             <Label htmlFor='email' className='block mb-2 font-semibold text-sm'>
-              Product
+              Email
             </Label>
-            <Input id='product' name='product' type='text' />
-          </div>
-          <div className=''>
-            <Label htmlFor='value' className='block mb-2 font-semibold text-sm'>
-              Amount
-            </Label>
-            <Input id='value' name='value' type='text' />
+            <Input id='email' name='email' type='email' />
           </div>
           <div className=''>
             <Label
-              htmlFor='description'
+              htmlFor='position'
               className='block mb-2 font-semibold text-sm'
             >
-              Description
+              Position
             </Label>
-            <Textarea id='description' name='description' />
+            <Input id='position' name='position' type='text' />
+          </div>
+          <div className=''>
+            <Label htmlFor='role' className='block mb-2 font-semibold text-sm'>
+              Role
+            </Label>
+            <RoleMenu />
+          </div>
+          <div className=''>
+            <Label htmlFor='notes' className='block mb-2 font-semibold text-sm'>
+              Notes
+            </Label>
+            <Textarea id='notes' name='notes' />
           </div>
           <div className='pb-5'>
             <SubmitButton />
           </div>
-        </form>
+        </form> */}
+        <CreateUserForm />
       </div>
     </main>
   )
 }
 
-export default NewInvoicePage
+export default NewUserPage

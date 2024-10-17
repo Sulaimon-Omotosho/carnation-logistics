@@ -1,20 +1,37 @@
 'use client'
 
-import { useFormStatus } from 'react-dom'
+import React from 'react'
 import { Button } from './ui/button'
-import { LoaderCircle } from 'lucide-react'
+import Image from 'next/image'
+import { useFormStatus } from 'react-dom'
 
-const SubmitButton = () => {
+interface ButtonProps {
+  isLoading?: boolean
+  className?: string
+  children?: React.ReactNode
+}
+
+const SubmitButton = ({ isLoading, className, children }: ButtonProps) => {
   const { pending } = useFormStatus()
-  console.log(pending)
-
   return (
-    <Button className='relative w-full font-semibold'>
-      <span className={pending ? 'text-transparent' : ''}>Submit</span>
-      {pending && (
-        <span className='absolute text-gray-400 flex items-center justify-center w-full h-full'>
-          <LoaderCircle className='animate-spin' />
-        </span>
+    <Button
+      type='submit'
+      disabled={pending || isLoading}
+      className={className ?? 'shad-primary-btn w-full'}
+    >
+      {pending || isLoading ? (
+        <div className='flex items-center gap-4'>
+          <Image
+            src='/assets/icons/loader.svg'
+            alt='loader'
+            width={24}
+            height={24}
+            className='animate-spin'
+          />
+          Loading...
+        </div>
+      ) : (
+        children
       )}
     </Button>
   )

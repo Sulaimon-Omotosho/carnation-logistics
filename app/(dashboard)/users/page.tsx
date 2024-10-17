@@ -1,9 +1,11 @@
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { users, usersColumns } from '@/constants'
 import { Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { CirclePlus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -65,7 +67,7 @@ const UsersPage = () => {
   )
 
   return (
-    <div>
+    <div className='relative'>
       <TableComponent
         title='Users'
         description='List of users'
@@ -73,6 +75,14 @@ const UsersPage = () => {
         renderRow={renderRow}
         data={users}
       />
+      <div className='absolute top-7 right-5 md:right-12'>
+        <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>
+          <Link href='/users/new'>
+            <CirclePlus className='h-7 w-7' />
+            <span className='hidden md:block'>Create User</span>
+          </Link>
+        </Button>
+      </div>
     </div>
   )
 }

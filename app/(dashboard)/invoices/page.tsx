@@ -80,9 +80,10 @@ const InvoicesPage = () => {
         data={orders}
       />
       <div className='absolute top-7 right-5 md:right-12'>
-        <Button className='inline-flex gap-2' variant={'ghost'} asChild>
+        <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>
           <Link href='/invoices/new'>
-            <CirclePlus className='h-4 w-4' /> Create Invoice
+            <CirclePlus className='h-7 w-7' />
+            <span className='hidden md:block'>Create Invoice</span>
           </Link>
         </Button>
       </div>

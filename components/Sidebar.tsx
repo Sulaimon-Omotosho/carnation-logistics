@@ -41,17 +41,17 @@ const Sidebar = () => {
               <UsersRound className='w-4 h-auto' />
               <span className='hidden lg:block'>Users</span>
             </Link>
-            <Link
+            {/* <Link
               href='/analytics'
               className='flex items-center justify-center lg:justify-start gap-4 text-gray-500 dark:text-gray-400 py-2 md:px-2 rounded-md hover:bg-susuSky'
             >
               <ChartPie className='w-4 h-auto' />
               <span className='hidden lg:block'>Analytics</span>
-            </Link>
+            </Link> */}
           </div>
           <div className='flex flex-col gap-4'>
-            <Link
-              href='/profile'
+            <div
+              // href='/profile'
               className='flex items-center justify-center lg:justify-start gap-2 text-gray-500 dark:text-gray-400 md:px-2 rounded-md hover:bg-susuSky'
             >
               <Image
@@ -62,7 +62,7 @@ const Sidebar = () => {
                 className='w-7 lg:w-10 h-7 lg:h-10 rounded-full object-fit border-2 border-gray-400'
               />
               <p className='hidden lg:block'>Idowu Obawolu</p>
-            </Link>
+            </div>
             <ModeToggle />
           </div>
         </div>
