@@ -29,6 +29,7 @@ interface CustomProps {
   label?: string
   type?: string
   placeholder?: string
+  value?: string
   className?: string
   iconSrc?: string
   iconAlt?: string
@@ -46,6 +47,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
     iconAlt,
     type,
     placeholder,
+    value,
     className,
     showTimeSelect,
     dateFormat,
@@ -69,7 +71,9 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             <Input
               placeholder={placeholder}
               {...field}
-              className='shad-input border-0'
+              value={value}
+              // className='shad-input border-0'
+              className={`shad-input border-0 ${className}`}
             />
           </FormControl>
         </div>
@@ -91,6 +95,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
               type='number'
               step='0.01'
               placeholder={1000}
+              value={value}
               {...field}
               // className='shad-input border-0'
               className={`shad-input border-0 ${className}`}

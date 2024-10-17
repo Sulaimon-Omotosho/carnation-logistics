@@ -10,6 +10,7 @@ import SubmitButton from '../SubmitButton'
 
 const CalculatorForm = () => {
   const [error, setError] = useState('')
+  const [totalCost, setTotalCost] = useState<string>('')
 
   const form = useForm<z.infer<typeof calculatorVal>>({
     resolver: zodResolver(calculatorVal),
@@ -21,8 +22,18 @@ const CalculatorForm = () => {
   })
 
   const onSubmit = (data: z.infer<typeof calculatorVal>) => {
-    console.log('Form data:', data)
-    // Handle the form submission
+    const { distance, fuel, miscellaneous } = data
+
+    const calcTotalCost = (
+      distance * 0.25 * fuel +
+      miscellaneous
+    ).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+    setTotalCost(calcTotalCost)
+
+    setError('')
   }
 
   return (
@@ -78,6 +89,23 @@ const CalculatorForm = () => {
 
         <div className=''>
           <SubmitButton>Calculate</SubmitButton>
+        </div>
+        <div className='relative'>
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name='total'
+            label='Total'
+            value={totalCost}
+            disabled={true}
+            className='pl-8 text-2xl'
+          />
+          <p className='text-2xl font-bold uppercase absolute top-10 left-3'>
+            n
+          </p>
+          {error && (
+            <p className='text-red-500 text-center absolute pl-10'>{error}</p>
+          )}
         </div>
       </form>
     </Form>
