@@ -11,8 +11,6 @@ import SubmitButton from '../SubmitButton'
 import { Form } from '../ui/form'
 import { roles } from '@/constants'
 import { SelectItem } from '../ui/select'
-import { Button } from '../ui/button'
-import { Eye, EyeClosed } from 'lucide-react'
 
 const CreateUserForm = () => {
   const [error, setError] = useState('')

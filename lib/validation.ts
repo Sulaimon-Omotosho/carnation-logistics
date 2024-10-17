@@ -36,4 +36,5 @@ export const createInvoice = z.object({
   product: z.string().min(6, 'Add delivery state to and fro'),
   date: z.string().min(5, 'Add date of delivery').date(),
   amount: z.number().min(5, 'Add amount'),
+  description: z.string().min(10, 'Description must be added'),
 })
