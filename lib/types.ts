@@ -41,6 +41,7 @@ export interface SingleOrder {
 
 export enum FormFieldType {
   INPUT = 'input',
+  NUMBER_INPUT = 'priceInput',
   TEXTAREA = 'textarea',
   PHONE_INPUT = 'phoneInput',
   CHECKBOX = 'checkbox',

@@ -22,16 +22,6 @@ import { Checkbox } from '../ui/checkbox'
 import { FormFieldType } from '@/lib/types'
 import { Calendar } from 'lucide-react'
 
-// export enum FormFieldType {
-//   INPUT = 'input',
-//   TEXTAREA = 'textarea',
-//   PHONE_INPUT = 'phoneInput',
-//   CHECKBOX = 'checkbox',
-//   DATE_PICKER = 'datePicker',
-//   SELECT = 'select',
-//   SKELETON = 'skeleton',
-// }
-
 interface CustomProps {
   control: Control<any>
   fieldType: FormFieldType
@@ -39,6 +29,7 @@ interface CustomProps {
   label?: string
   type?: string
   placeholder?: string
+  className?: string
   iconSrc?: string
   iconAlt?: string
   disabled?: boolean
@@ -55,6 +46,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
     iconAlt,
     type,
     placeholder,
+    className,
     showTimeSelect,
     dateFormat,
     renderSkeleton,
@@ -78,6 +70,30 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
               placeholder={placeholder}
               {...field}
               className='shad-input border-0'
+            />
+          </FormControl>
+        </div>
+      )
+    case FormFieldType.NUMBER_INPUT:
+      return (
+        <div className='flex rounded-md border border-dark-500'>
+          {iconSrc && (
+            <Image
+              src={iconSrc}
+              height={24}
+              width={24}
+              alt={iconAlt || 'Icon'}
+              className='ml-2'
+            />
+          )}
+          <FormControl>
+            <Input
+              type='number'
+              step='0.01'
+              placeholder={1000}
+              {...field}
+              // className='shad-input border-0'
+              className={`shad-input border-0 ${className}`}
             />
           </FormControl>
         </div>

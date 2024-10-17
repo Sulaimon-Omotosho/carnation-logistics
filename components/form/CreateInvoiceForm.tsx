@@ -19,6 +19,7 @@ const CreateInvoiceForm = () => {
       email: '',
       phone: '',
       description: '',
+      amount: 0,
     },
   })
 
@@ -126,11 +127,10 @@ const CreateInvoiceForm = () => {
         </div>
         <div className='relative'>
           <CustomFormField
-            fieldType={FormFieldType.INPUT}
+            fieldType={FormFieldType.NUMBER_INPUT}
             control={form.control}
             name='amount'
             label='Amount'
-            placeholder='Amount'
             iconSrc=''
             iconAlt='email'
           />

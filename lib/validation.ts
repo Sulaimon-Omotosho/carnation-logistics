@@ -38,6 +38,31 @@ export const createInvoice = z.object({
   address: z.string().min(20, 'add delivery address'),
   product: z.string().min(6, 'Add delivery states to and fro'),
   date: z.coerce.date(),
-  amount: z.string().min(5, 'Add amount'),
+  // amount: z.string().min(5, 'Add amount'),
+  amount: z.preprocess(
+    (value) => parseFloat(value as string),
+    z
+      .number({ invalid_type_error: 'Price must be a number' }) // Ensure it's a number
+      .positive('Price must be a positive number') // Must be positive
+      .min(0.01, 'Price must be at least 0.01')
+  ), // Optional minimum price
   description: z.string().min(10, 'Description must be added'),
+})
+
+export const calculatorVal = z.object({
+  distance: z.preprocess(
+    (value) => parseFloat(value as string),
+    z.number().min(1, 'Distance must be at least 1km')
+  ),
+  fuel: z.preprocess(
+    (value) => parseFloat(value as string),
+    z.number().min(1000, 'Price must be at least N1000')
+  ),
+  miscellaneous: z.preprocess(
+    (value) => parseFloat(value as string),
+    z
+      .number()
+      .min(1000, 'Price must be at least 1km')
+      .positive('Price must be a positive number')
+  ),
 })
