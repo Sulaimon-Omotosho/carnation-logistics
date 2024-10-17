@@ -85,12 +85,12 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           </FormControl>
         </div>
       )
-    case FormFieldType.PASSWORD: {
-      const [showPassword, setShowPassword] = useState(true)
+    case FormFieldType.PASSWORD:
+      // const [showPassword, setShowPassword] = useState(true)
 
-      const togglePassword = () => {
-        setShowPassword(!showPassword)
-      }
+      // const togglePassword = () => {
+      //   setShowPassword(!showPassword)
+      // }
       return (
         <div className='flex rounded-md border border-dark-500'>
           {iconSrc && (
@@ -104,14 +104,15 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           )}
           <FormControl>
             <Input
-              type={showPassword ? 'text' : 'password'}
+              // type={showPassword ? 'text' : 'password'}
+              type='password'
               required
               placeholder={placeholder}
               {...field}
               className='shad-input border-0'
             />
           </FormControl>
-          <div
+          {/* <div
             // variant={'ghost'}
             // onClick={togglePassword}
             className='ml-2'
@@ -121,10 +122,10 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             ) : (
               <EyeClosed className='h-5 w-5 text-gray-500' />
             )}
-          </div>
+          </div> */}
         </div>
       )
-    }
+
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl>
