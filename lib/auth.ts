@@ -33,7 +33,7 @@ export const authOptions = {
         const email = credentials.email as string
         // const hash = saltAndHashPassword(credentials.password)
 
-        let user: any = await db.user.findUnique({
+        const user: any = await db.user.findUnique({
           where: {
             email,
           },
