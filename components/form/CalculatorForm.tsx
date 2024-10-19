@@ -61,7 +61,7 @@ const CalculatorForm = () => {
             fieldType={FormFieldType.NUMBER_INPUT}
             control={form.control}
             name='fuel'
-            label='Fuel'
+            label='Fuel per litre'
             className='pl-7'
           />
           <p className='text-xl font-bold uppercase absolute top-10 left-3'>

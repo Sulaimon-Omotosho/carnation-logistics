@@ -10,6 +10,7 @@ import Link from 'next/link'
 import React from 'react'
 import { ModeToggle } from './ModeToggle'
 import Image from 'next/image'
+import SignOutButton from './SignOutButton'
 
 const Sidebar = () => {
   return (
@@ -50,6 +51,7 @@ const Sidebar = () => {
             </Link> */}
           </div>
           <div className='flex flex-col gap-4'>
+            <SignOutButton />
             <div
               // href='/profile'
               className='flex items-center justify-center lg:justify-start gap-2 text-gray-500 dark:text-gray-400 md:px-2 rounded-md hover:bg-susuSky'

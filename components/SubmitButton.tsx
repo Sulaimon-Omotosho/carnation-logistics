@@ -4,6 +4,7 @@ import React from 'react'
 import { Button } from './ui/button'
 import Image from 'next/image'
 import { useFormStatus } from 'react-dom'
+import { LoaderCircle } from 'lucide-react'
 
 interface ButtonProps {
   isLoading?: boolean
@@ -21,13 +22,7 @@ const SubmitButton = ({ isLoading, className, children }: ButtonProps) => {
     >
       {pending || isLoading ? (
         <div className='flex items-center gap-4'>
-          <Image
-            src='/assets/icons/loader.svg'
-            alt='loader'
-            width={24}
-            height={24}
-            className='animate-spin'
-          />
+          <LoaderCircle className=' animate-spin' />
           Loading...
         </div>
       ) : (

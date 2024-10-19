@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Form } from '../ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createInvoice } from '@/lib/validation'
+import { InvoiceFormValidation } from '@/lib/validation'
 import { z } from 'zod'
 import CustomFormField from './CustomFormField'
 import { FormFieldType } from '@/lib/types'
@@ -13,8 +13,8 @@ import SubmitButton from '../SubmitButton'
 const CreateInvoiceForm = () => {
   const [error, setError] = useState('')
 
-  const form = useForm<z.infer<typeof createInvoice>>({
-    resolver: zodResolver(createInvoice),
+  const form = useForm<z.infer<typeof InvoiceFormValidation>>({
+    resolver: zodResolver(InvoiceFormValidation),
     defaultValues: {
       email: '',
       phone: '',
@@ -22,7 +22,7 @@ const CreateInvoiceForm = () => {
     },
   })
 
-  const onSubmit = (data: z.infer<typeof createInvoice>) => {
+  const onSubmit = (data: z.infer<typeof InvoiceFormValidation>) => {
     console.log('Form data:', data)
     // Handle the form submission
   }

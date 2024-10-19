@@ -4,9 +4,7 @@ const Footer = () => {
       <p className='text-[10px] md:text-sm'>
         CRL Logistics &copy; {new Date().getFullYear()}
       </p>
-      <p className='text-[10px] md:text-sm'>
-        Created by Sulaimon Omotosho using Next.js, NextAuth
-      </p>
+      <p className='text-[10px] md:text-sm'>Created by Sulaimon Omotosho</p>
     </footer>
   )
 }

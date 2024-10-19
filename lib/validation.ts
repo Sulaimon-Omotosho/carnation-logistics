@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 
-export const createUser = z.object({
+export const UserFormValidation = z.object({
   name: z
     .string()
     .min(5, 'Name must be at least 5 characters')
@@ -24,7 +24,15 @@ export const createUser = z.object({
   notes: z.string().optional(),
 })
 
-export const createInvoice = z.object({
+export const LoginFormValidation = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z
+    .string()
+    .min(8, 'Password must be more than 8 characters')
+    .max(20, 'Password must be less than 20 characters'),
+})
+
+export const InvoiceFormValidation = z.object({
   name: z
     .string()
     .min(5, 'Name must be at least 5 characters')

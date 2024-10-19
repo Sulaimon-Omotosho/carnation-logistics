@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import CustomFormField from './CustomFormField'
 import { FormFieldType } from '@/lib/types'
 import { z } from 'zod'
-import { createUser } from '@/lib/validation'
+import { UserFormValidation } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import SubmitButton from '../SubmitButton'
 import { Form } from '../ui/form'
@@ -13,13 +13,19 @@ import { roles } from '@/constants'
 import { SelectItem } from '../ui/select'
 import { Button } from '../ui/button'
 import { Eye, EyeClosed } from 'lucide-react'
+import { CreateNewUser } from '@/lib/actions/auth'
+import { useRouter } from 'next/navigation'
 
 const CreateUserForm = () => {
   const [error, setError] = useState('')
+  const [userError, setUserError] = useState('')
   const [showPassword, setShowPassword] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof createUser>>({
-    resolver: zodResolver(createUser),
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof UserFormValidation>>({
+    resolver: zodResolver(UserFormValidation),
     defaultValues: {
       email: '',
       password: '',
@@ -31,9 +37,33 @@ const CreateUserForm = () => {
     setShowPassword(!showPassword)
   }
 
-  const onSubmit = (data: z.infer<typeof createUser>) => {
-    console.log('Form data:', data)
-    // Handle the form submission
+  const onSubmit = async (data: z.infer<typeof UserFormValidation>) => {
+    const formData = new FormData()
+    setIsLoading(true)
+
+    formData.append('name', data.name)
+    formData.append('phone', data.phone)
+    formData.append('email', data.email)
+    formData.append('password', data.password)
+    formData.append('position', data.position)
+    formData.append('role', data.role)
+    formData.append('address', data.address)
+    formData.append('notes', data.notes || '')
+
+    try {
+      const response = await CreateNewUser(formData)
+
+      if (response?.error) {
+        setUserError(response.error)
+      } else {
+        router.push(`/users`)
+      }
+    } catch (error) {
+      console.error('Error creating user:', error)
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -49,8 +79,6 @@ const CreateUserForm = () => {
             name='name'
             label='Name'
             placeholder='Full Name'
-            iconSrc=''
-            iconAlt='email'
           />
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
@@ -124,7 +152,6 @@ const CreateUserForm = () => {
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
           )}
         </div>
-
         <div className='relative'>
           <CustomFormField
             fieldType={FormFieldType.SELECT}
@@ -175,7 +202,10 @@ const CreateUserForm = () => {
         </div>
 
         <div className=''>
-          <SubmitButton>Create User</SubmitButton>
+          <SubmitButton isLoading={isLoading}>Create User</SubmitButton>{' '}
+          {userError && (
+            <p className='text-red-500 text-center pt-1'>{userError}</p>
+          )}
         </div>
       </form>
     </Form>

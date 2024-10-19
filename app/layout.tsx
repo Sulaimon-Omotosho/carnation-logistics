@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import SessionProviderWrapper from '@/components/SessionProviderWrapper'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -19,24 +22,27 @@ export const metadata: Metadata = {
   description: 'Generated for tracking sales and printing receipts',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getServerSession(authOptions)
   return (
     <html lang='en'>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased remove-scrollbar`}
       >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <SessionProviderWrapper session={session}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   )

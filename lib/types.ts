@@ -5,6 +5,7 @@ export interface Columns {
 }
 
 export interface Orders {
+  id: string
   name: string
   company: string
   email?: string

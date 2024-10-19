@@ -16,7 +16,7 @@ const InvoicesPage = () => {
   const renderRow = (item: Orders) => (
     <TableRow>
       <TableCell className='p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/invoices/${item.id}`} className='block p-4'>
           <div className='flex'>
             <div className='flex-1'>
               <div className='font-medium'>{item.company} </div>

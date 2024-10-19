@@ -34,10 +34,10 @@ model Invoice {
 }
 
 model User {
-  id      String   @id @default(uuid()) @map("_id") @db.ObjectId
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   email   String?   @unique
   name    String?
-  phone    String? @unique
+  phone    String?
   hashedPassword String?
   position    String?
   image String?
