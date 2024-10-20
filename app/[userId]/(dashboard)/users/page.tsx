@@ -1,3 +1,5 @@
+'use client'
+
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -6,17 +8,22 @@ import { users, usersColumns } from '@/constants'
 import { Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { CirclePlus } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 const UsersPage = () => {
-  const userId = 567389
+  const { data: session } = useSession()
+  const userId = session?.user.id
 
   const renderRow = (items: Users) => (
     <TableRow>
       <TableCell className=' p-0'>
-        <Link href={`/users/${userId}`} className='p-4 flex gap-4'>
+        <Link
+          href={`/${userId}/users/${items.userId}`}
+          className='p-4 flex gap-4'
+        >
           <Image
             src={items.image}
             height={100}
@@ -33,12 +40,12 @@ const UsersPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/users/${userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
           {items.phone}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/users/${userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
               'bg-yellow-500': items.role === 'user',
@@ -54,12 +61,12 @@ const UsersPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/users/${userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
           {items.position}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/users/${userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
           {items.userId}
         </Link>
       </TableCell>
@@ -77,7 +84,7 @@ const UsersPage = () => {
       />
       <div className='absolute top-7 right-5 md:right-12'>
         <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>
-          <Link href='/users/new'>
+          <Link href={`/${userId}/users/new`}>
             <CirclePlus className='h-7 w-7' />
             <span className='hidden md:block'>Create User</span>
           </Link>

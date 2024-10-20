@@ -1,4 +1,5 @@
-// import Orders from '@/components/dashboard/Orders'
+'use client'
+
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -7,16 +8,20 @@ import { invoiceColumns, orders } from '@/constants'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { CirclePlus } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 
 const InvoicesPage = () => {
+  const { data: session } = useSession()
+  const userId = session?.user.id
+
   const invoiceId = 34783
 
   const renderRow = (item: Orders) => (
     <TableRow>
       <TableCell className='p-0'>
-        <Link href={`/invoices/${item.id}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <div className='flex'>
             <div className='flex-1'>
               <div className='font-medium'>{item.company} </div>
@@ -34,12 +39,12 @@ const InvoicesPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           {item.product}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
               'bg-yellow-500': item.status === 'in-progress',
@@ -54,12 +59,12 @@ const InvoicesPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           {item.date}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           <span className='font-bold'>N</span>
           {item.amount.toLocaleString('en-US', {
             minimumFractionDigits: 2,
@@ -81,7 +86,7 @@ const InvoicesPage = () => {
       />
       <div className='absolute top-7 right-5 md:right-12'>
         <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>
-          <Link href='/invoices/new'>
+          <Link href={`/${userId}/invoices/new`}>
             <CirclePlus className='h-7 w-7' />
             <span className='hidden md:block'>Create Invoice</span>
           </Link>

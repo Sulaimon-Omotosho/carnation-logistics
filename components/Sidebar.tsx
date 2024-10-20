@@ -1,3 +1,5 @@
+'use client'
+
 import {
   ChartPie,
   CircleUserRound,
@@ -11,8 +13,12 @@ import React from 'react'
 import { ModeToggle } from './ModeToggle'
 import Image from 'next/image'
 import SignOutButton from './SignOutButton'
+import { useSession } from 'next-auth/react'
 
 const Sidebar = () => {
+  const { data: session } = useSession()
+  const userId = session?.user.id
+
   return (
     <div className='pt-4 pb-20 h-full overflow-scroll remove-scrollbar px-2 lg:px-4'>
       <div className='flex flex-col gap-2 h-full'>
@@ -22,21 +28,21 @@ const Sidebar = () => {
         <div className='h-full flex flex-col justify-between'>
           <div className='flex flex-col gap-2'>
             <Link
-              href='/home'
+              href={`/${userId}/home`}
               className='flex items-center justify-center lg:justify-start gap-4 text-gray-500 dark:text-gray-400 py-2 md:px-2 rounded-md hover:bg-susuSky'
             >
               <House className='w-4 h-auto' />
               <span className='hidden lg:block'>Home</span>
             </Link>
             <Link
-              href='/invoices'
+              href={`/${userId}/invoices`}
               className='flex items-center justify-center lg:justify-start gap-4 text-gray-500 dark:text-gray-400 py-2 md:px-2 rounded-md hover:bg-susuSky'
             >
               <Notebook className='w-4 h-auto' />
               <span className='hidden lg:block'>Invoices</span>
             </Link>
             <Link
-              href='/users'
+              href={`/${userId}/users`}
               className='flex items-center justify-center lg:justify-start gap-4 text-gray-500 dark:text-gray-400 py-2 md:px-2 rounded-md hover:bg-susuSky'
             >
               <UsersRound className='w-4 h-auto' />

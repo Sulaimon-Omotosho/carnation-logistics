@@ -15,13 +15,16 @@ import { Button } from '../ui/button'
 import { Eye, EyeClosed } from 'lucide-react'
 import { CreateNewUser } from '@/lib/actions/auth'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 const CreateUserForm = () => {
   const [error, setError] = useState('')
   const [userError, setUserError] = useState('')
   const [showPassword, setShowPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+  const { data: session } = useSession()
 
+  const userId = session?.user.id
   const router = useRouter()
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
@@ -56,7 +59,7 @@ const CreateUserForm = () => {
       if (response?.error) {
         setUserError(response.error)
       } else {
-        router.push(`/users`)
+        router.push(`/${userId}/users`)
       }
     } catch (error) {
       console.error('Error creating user:', error)

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Form } from '../ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,14 +9,12 @@ import { z } from 'zod'
 import CustomFormField from './CustomFormField'
 import { FormFieldType } from '@/lib/types'
 import SubmitButton from '../SubmitButton'
-import { getUserByEmail, loginWithCredentials } from '@/lib/actions/auth'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { getSession, signIn } from 'next-auth/react'
 
 const LogInForm = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-
   const router = useRouter()
 
   const form = useForm<z.infer<typeof LoginFormValidation>>({
@@ -29,16 +27,8 @@ const LogInForm = () => {
 
   const onSubmit = async (data: z.infer<typeof LoginFormValidation>) => {
     setIsLoading(true)
-    console.log('Login Data:', data)
 
     try {
-      const existingUser = await getUserByEmail(data.email)
-      if (!existingUser) {
-        setError('User not found')
-        setIsLoading(false)
-        return
-      }
-
       const response = await signIn('credentials', {
         redirect: false,
         email: data.email,
@@ -48,7 +38,9 @@ const LogInForm = () => {
       if (response?.error) {
         setError(response.error)
       } else {
-        router.push('/home')
+        const session = await getSession()
+        const userId = session?.user?.id
+        router.push(`/${userId}/home`)
       }
     } catch (error) {
       setError('Something went wrong. Please try again.')

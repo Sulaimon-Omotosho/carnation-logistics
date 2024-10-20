@@ -1,3 +1,5 @@
+'use client'
+
 import Performance from '@/components/dashboard/Performance'
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
@@ -6,6 +8,7 @@ import { invoiceColumns, orders } from '@/constants'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { BookX, FileCheck2, FilePlus2, Loader, Mail, Phone } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -13,10 +16,13 @@ import React from 'react'
 const invoiceId = '76934'
 
 const UserPage = () => {
+  const { data: session } = useSession()
+  const userId = session?.user.id
+
   const renderRow = (item: Orders) => (
     <TableRow>
       <TableCell className='p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           <div className='flex'>
             <div className='flex-1'>
               <div className='font-medium'>{item.company} </div>
@@ -28,12 +34,12 @@ const UserPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           {item.product}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
               'bg-yellow-500': item.status === 'in-progress',
@@ -48,12 +54,12 @@ const UserPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           {item.date}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
           <span className='font-bold'>N</span>
           {item.amount.toLocaleString('en-US', {
             minimumFractionDigits: 2,

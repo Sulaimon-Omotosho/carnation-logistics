@@ -14,7 +14,8 @@ const AuthStatus = () => {
     return (
       <div className='flex flex-col items-center'>
         <p>Signed in as {session.user?.email}</p>
-        <p>Role is {session.user?.name} </p>
+        <p>Role is {session.user?.role} </p>
+        <p>Id is {session.user?.id} </p>
         <SignOutButton />
       </div>
     )

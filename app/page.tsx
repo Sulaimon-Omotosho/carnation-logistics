@@ -7,12 +7,10 @@ export default async function Home() {
   return (
     <div className='flex flex-col gap-4 items-center justify-center h-screen'>
       <h1 className='text-5xl font-bold'>CRL Logistics</h1>
-      <Link href='/home'>
+      <Link href='/login'>
         <Button className=''>Welcome</Button>
       </Link>
-      <Link href='/login'>
-        <Button className=''>Log In</Button>
-      </Link>
+      {/* <AuthStatus /> */}
     </div>
   )
 }
