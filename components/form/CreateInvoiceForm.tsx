@@ -9,9 +9,11 @@ import { z } from 'zod'
 import CustomFormField from './CustomFormField'
 import { FormFieldType } from '@/lib/types'
 import SubmitButton from '../SubmitButton'
+import { createNewInvoice } from '@/lib/actions/data'
 
 const CreateInvoiceForm = () => {
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof InvoiceFormValidation>>({
     resolver: zodResolver(InvoiceFormValidation),
@@ -22,14 +24,32 @@ const CreateInvoiceForm = () => {
     },
   })
 
-  const onSubmit = (data: z.infer<typeof InvoiceFormValidation>) => {
-    console.log('Form data:', data)
+  const onSubmit = async (data: z.infer<typeof InvoiceFormValidation>) => {
+    setIsLoading(true)
+
+    const formattedData = {
+      ...data,
+      date:
+        data.date instanceof Date ? data.date.toISOString() : String(data.date),
+      amount: data.amount.toString(), // Convert number to string
+    }
+
+    try {
+      const response = await createNewInvoice(formattedData)
+    } catch (error) {
+      console.error('Creating new invoice error:', error)
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+
     // Handle the form submission
   }
 
   return (
     <Form {...form}>
       <form
+        // action={createNewInvoice}
         onSubmit={form.handleSubmit(onSubmit)}
         className='space-y-4 max-w-[400px] pb-10'
       >
@@ -153,7 +173,7 @@ const CreateInvoiceForm = () => {
         </div>
 
         <div className=''>
-          <SubmitButton>Create Invoice</SubmitButton>
+          <SubmitButton isLoading={isLoading}>Create Invoice</SubmitButton>
         </div>
       </form>
     </Form>

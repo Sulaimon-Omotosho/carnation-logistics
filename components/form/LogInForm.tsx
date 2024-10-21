@@ -11,11 +11,18 @@ import { FormFieldType } from '@/lib/types'
 import SubmitButton from '../SubmitButton'
 import { useRouter } from 'next/navigation'
 import { getSession, signIn } from 'next-auth/react'
+import { Button } from '../ui/button'
+import { Eye, EyeClosed } from 'lucide-react'
 
 const LogInForm = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(true)
   const router = useRouter()
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword)
+  }
 
   const form = useForm<z.infer<typeof LoginFormValidation>>({
     resolver: zodResolver(LoginFormValidation),
@@ -71,8 +78,20 @@ const LogInForm = () => {
             control={form.control}
             name='password'
             label='Password'
+            type={showPassword ? 'password' : 'text'}
             placeholder='Password'
           />
+          <Button
+            variant={'ghost'}
+            onClick={togglePassword}
+            className='absolute top-9 right-3'
+          >
+            {showPassword ? (
+              <EyeClosed className='h-5 w-5 text-gray-500' />
+            ) : (
+              <Eye className='h-5 w-5 text-gray-500' />
+            )}
+          </Button>
         </div>
 
         <div className=''>

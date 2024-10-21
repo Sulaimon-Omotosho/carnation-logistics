@@ -27,10 +27,16 @@ model Invoice {
   company     String
   email     String
   phone     String
+  address     String
   product     String
+  date     String
+  amount     String
+  description     String
   status status @default(PENDING)
   createdBy   User      @relation(fields: [creatorId], references: [id])
   creatorId String    @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model User {

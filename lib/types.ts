@@ -20,10 +20,13 @@ export interface Users {
   name: string
   email: string
   phone: string
-  role: string
+  role: 'ADMIN' | 'SUPERVISOR' | 'USER'
   position: string
-  userId: number
-  image: string
+  userId?: string
+  address: string
+  image?: string
+  notes?: string
+  password: string
 }
 
 export interface SingleOrder {

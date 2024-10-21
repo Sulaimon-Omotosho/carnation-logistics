@@ -1,12 +1,12 @@
 'use server'
 
-import AuthError from 'next-auth'
+import { getServerSession } from 'next-auth'
 import { saltAndHashPassword } from '@/utils/helper'
 import { signIn } from 'next-auth/react'
-// import { db } from '../db'
-import { revalidatePath } from 'next/cache'
 import { PrismaClient, UserRole } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+import { Users } from '../types'
+import { redirect } from 'next/navigation'
+import { authOptions } from '../auth'
 
 const db = new PrismaClient()
 
@@ -27,46 +27,39 @@ export const getUserByEmail = async (email: string) => {
 
 // LOGIN
 export const login = async (provider: string) => {
-  await signIn(provider, { callbackUrl: '/redirect' })
+  await signIn(provider, { callbackUrl: '/' })
 }
 
 // CREATE USER
-export const CreateNewUser = async (formData: FormData) => {
-  const name = formData.get('name') as string
-  const phone = formData.get('phone') as string
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const position = formData.get('position') as string
-  const role = formData.get('role') as string
-  const address = formData.get('address') as string
-  const notes = formData.get('notes') as string
+export const CreateNewUser = async ({ data }: { data: Users }) => {
+  const session = await getServerSession(authOptions)
 
-  const existingUser = await getUserByEmail(email)
+  if (session?.user.role !== 'ADMIN') {
+    return { error: 'User not authenticated' }
+  }
+
+  const existingUser = await getUserByEmail(data.email)
   if (existingUser) {
     return { error: 'Email already exists' }
   }
 
-  try {
-    const hash = saltAndHashPassword(password)
+  const hash = saltAndHashPassword(data.password)
 
-    const userRole: UserRole = role as UserRole
-    const newUser = await db.user.create({
-      data: {
-        name,
-        phone,
-        email,
-        hashedPassword: hash,
-        position,
-        role: userRole,
-        address,
-        notes,
-      },
-    })
+  const userRole: UserRole = data.role as UserRole
+  const newUser = await db.user.create({
+    data: {
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      hashedPassword: hash,
+      position: data.position,
+      role: userRole,
+      address: data.address,
+      notes: data.notes,
+    },
+  })
 
-    return { success: true }
-  } catch (error: any) {
-    throw error
-  }
+  redirect(`/${session?.user.id}/users`)
 }
 
 // LOGIN IN WITH CREDENTIALS

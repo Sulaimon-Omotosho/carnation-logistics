@@ -11,21 +11,12 @@ import SubmitButton from '../SubmitButton'
 import { Form } from '../ui/form'
 import { roles } from '@/constants'
 import { SelectItem } from '../ui/select'
-import { Button } from '../ui/button'
-import { Eye, EyeClosed } from 'lucide-react'
 import { CreateNewUser } from '@/lib/actions/auth'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 
 const CreateUserForm = () => {
   const [error, setError] = useState('')
   const [userError, setUserError] = useState('')
-  const [showPassword, setShowPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const { data: session } = useSession()
-
-  const userId = session?.user.id
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -36,30 +27,14 @@ const CreateUserForm = () => {
     },
   })
 
-  const togglePassword = () => {
-    setShowPassword(!showPassword)
-  }
-
   const onSubmit = async (data: z.infer<typeof UserFormValidation>) => {
-    const formData = new FormData()
     setIsLoading(true)
 
-    formData.append('name', data.name)
-    formData.append('phone', data.phone)
-    formData.append('email', data.email)
-    formData.append('password', data.password)
-    formData.append('position', data.position)
-    formData.append('role', data.role)
-    formData.append('address', data.address)
-    formData.append('notes', data.notes || '')
-
     try {
-      const response = await CreateNewUser(formData)
+      const response = await CreateNewUser({ data })
 
       if (response?.error) {
         setUserError(response.error)
-      } else {
-        router.push(`/${userId}/users`)
       }
     } catch (error) {
       console.error('Error creating user:', error)
@@ -119,24 +94,13 @@ const CreateUserForm = () => {
           <CustomFormField
             fieldType={FormFieldType.PASSWORD}
             control={form.control}
-            type={showPassword ? 'password' : 'text'}
+            type='text'
             name='password'
             label='Password'
             placeholder='Password'
             iconSrc=''
             iconAlt='password'
           />
-          <Button
-            variant={'ghost'}
-            onClick={togglePassword}
-            className='absolute top-9 right-3'
-          >
-            {showPassword ? (
-              <EyeClosed className='h-5 w-5 text-gray-500' />
-            ) : (
-              <Eye className='h-5 w-5 text-gray-500' />
-            )}
-          </Button>
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
           )}
