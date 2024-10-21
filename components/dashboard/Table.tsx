@@ -13,7 +13,7 @@ type TableComponentProps<T> = {
   title: string
   description: string
   renderRow: (item: T) => React.ReactNode
-  data: T[]
+  data: any[]
 }
 
 const TableComponent = <T,>({

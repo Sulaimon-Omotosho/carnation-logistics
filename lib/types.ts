@@ -23,10 +23,10 @@ export interface Users {
   role: 'ADMIN' | 'SUPERVISOR' | 'USER'
   position: string
   userId?: string
-  address: string
+  address?: string
   image?: string
   notes?: string
-  password: string
+  password?: string
 }
 
 export interface SingleOrder {

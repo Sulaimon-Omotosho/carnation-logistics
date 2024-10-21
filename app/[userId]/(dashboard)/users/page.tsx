@@ -25,7 +25,7 @@ const UsersPage = () => {
           className='p-4 flex gap-4'
         >
           <Image
-            src={items.image}
+            src={items.image!}
             height={100}
             width={100}
             alt='profile image'
@@ -48,9 +48,9 @@ const UsersPage = () => {
         <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
-              'bg-yellow-500': items.role === 'user',
-              'bg-violet-500': items.role === 'admin',
-              'bg-blue-600': items.role === 'supervisor',
+              'bg-yellow-500': items.role === 'USER',
+              'bg-violet-500': items.role === 'ADMIN',
+              'bg-blue-600': items.role === 'SUPERVISOR',
             })}
             // variant={
             //   users.role === 'fulfilled' ? 'secondary' : 'outline'
