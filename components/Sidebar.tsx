@@ -5,7 +5,6 @@ import {
   CircleUserRound,
   House,
   Notebook,
-  User,
   UsersRound,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -62,14 +61,24 @@ const Sidebar = () => {
               // href='/profile'
               className='flex items-center justify-center lg:justify-start gap-2 text-gray-500 dark:text-gray-400 md:px-2 rounded-md hover:bg-susuSky'
             >
-              <Image
-                src='https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg'
-                width={100}
-                height={100}
-                alt='Profile Image'
-                className='w-7 lg:w-10 h-7 lg:h-10 rounded-full object-fit border-2 border-gray-400'
-              />
-              <p className='hidden lg:block'>Idowu Obawolu</p>
+              {session?.user.image ? (
+                <Image
+                  src='https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg'
+                  width={100}
+                  height={100}
+                  alt='Profile Image'
+                  className='w-7 lg:w-10 h-7 lg:h-10 rounded-full object-fit border-2 border-gray-400'
+                />
+              ) : (
+                <CircleUserRound className='w-10 h-10' />
+              )}
+
+              <p className='hidden lg:flex font-semibold flex-col'>
+                {session?.user.name}
+                <span className='font-thin text-xs capitalize'>
+                  {session?.user.role?.toLowerCase()}
+                </span>
+              </p>
             </div>
             <ModeToggle />
           </div>

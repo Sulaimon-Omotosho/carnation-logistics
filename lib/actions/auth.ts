@@ -38,7 +38,7 @@ export const CreateNewUser = async ({ data }: { data: Users }) => {
     return { error: 'User not authenticated' }
   }
 
-  const existingUser = await getUserByEmail(data.email)
+  const existingUser = await getUserByEmail(data.email.toLowerCase())
   if (existingUser) {
     return { error: 'Email already exists' }
   }
@@ -50,7 +50,7 @@ export const CreateNewUser = async ({ data }: { data: Users }) => {
     data: {
       name: data.name,
       phone: data.phone,
-      email: data.email,
+      email: data.email.toLowerCase(),
       hashedPassword: hash,
       position: data.position,
       role: userRole,
@@ -67,7 +67,7 @@ export const loginWithCredentials = async (formData: FormData) => {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const existingUser = await getUserByEmail(email)
+  const existingUser = await getUserByEmail(email.toLowerCase())
   if (!existingUser) {
     return { error: 'User not found' }
   }

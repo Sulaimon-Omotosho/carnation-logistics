@@ -8,6 +8,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 const db = new PrismaClient()
 
+enum status {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  FULFILLED = 'FULFILLED',
+  CANCELLED = 'CANCELLED',
+}
+
 // CREATE NEW INVOICE
 export const createNewInvoice = async (data: {
   name: string
@@ -36,7 +43,7 @@ export const createNewInvoice = async (data: {
       slug,
       name: data.name || '',
       company: data.company || '',
-      email: data.email || '',
+      email: data.email.toLowerCase() || '',
       phone: data.phone || '',
       address: data.address || '',
       product: data.product || '',
@@ -59,7 +66,11 @@ export const createNewInvoice = async (data: {
 // GET ALL INVOICES
 export const getAllInvoices = async () => {
   try {
-    const invoices = await db.invoice.findMany()
+    const invoices = await db.invoice.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
     return invoices.map((invoice) => ({
       ...invoice,
       amount:
@@ -92,5 +103,61 @@ export const getInvoice = async (invoiceId: string) => {
     console.error('Error fetching invoice:', error)
   } finally {
     await db.$disconnect
+  }
+}
+
+// UPDATE INVOICE STATUS
+export const updateInvoice = async ({
+  invoiceId,
+  newStatus,
+  verificationNote,
+}: {
+  invoiceId: string
+  newStatus: string
+  verificationNote?: string
+}) => {
+  const session = await getServerSession(authOptions)
+
+  if (session?.user.role === 'USER') {
+    return Error('You are not authorized to do this')
+  }
+
+  try {
+    const invoice = await db.invoice.findUnique({
+      where: { id: invoiceId },
+    })
+
+    if (!invoice) {
+      return { error: 'Invoice not found' }
+    }
+
+    const updateData: any = {
+      status: newStatus,
+      updatedAt: new Date(),
+    }
+
+    if (newStatus === status.IN_PROGRESS) {
+      updateData.paymentVerifiedBy = session?.user.id
+    }
+
+    if (newStatus === status.FULFILLED) {
+      updateData.deliveryVerifiedBy = session?.user.id
+      updateData.verificationNotes = verificationNote
+    }
+
+    if (newStatus === status.CANCELLED) {
+      updateData.cancelledBy = session?.user.id
+      updateData.verificationNotes = verificationNote
+    }
+
+    const updatedInvoice = await db.invoice.update({
+      where: { id: invoiceId },
+      data: updateData,
+    })
+
+    return updatedInvoice
+  } catch (error) {
+    console.error('Error updating invoice:', error)
+    return { error: 'Failed to update invoice' }
   }
 }

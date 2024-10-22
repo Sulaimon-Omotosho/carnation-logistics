@@ -559,19 +559,15 @@ export const singleOrder = [
 
 export const statuses = [
   {
-    id: 'pending',
-    label: 'Pending',
-  },
-  {
-    id: 'inProgress',
+    id: 'IN_PROGRESS',
     label: 'In Progress',
   },
   {
-    id: 'fulfilled',
+    id: 'FULFILLED',
     label: 'Fulfilled',
   },
   {
-    id: 'cancelled',
+    id: 'CANCELLED',
     label: 'Cancelled',
   },
 ]

@@ -83,12 +83,20 @@ const UsersPage = () => {
         data={users}
       />
       <div className='absolute top-7 right-5 md:right-12'>
-        <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>
-          <Link href={`/${userId}/users/new`}>
-            <CirclePlus className='h-7 w-7' />
-            <span className='hidden md:block'>Create User</span>
-          </Link>
-        </Button>
+        {session?.user.role === 'ADMIN' ? (
+          <Button
+            className='inline-flex gap-2 text-xl'
+            variant={'ghost'}
+            asChild
+          >
+            <Link href={`/${userId}/users/new`}>
+              <CirclePlus className='h-7 w-7' />
+              <span className='hidden md:block'>Create User</span>
+            </Link>
+          </Button>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   )

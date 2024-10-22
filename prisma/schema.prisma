@@ -37,6 +37,8 @@ model Invoice {
   creatorId String    @db.ObjectId
   paymentVerifiedBy String?
   deliveryVerifiedBy String?
+  cancelledBy String?
+  verificationNotes String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
