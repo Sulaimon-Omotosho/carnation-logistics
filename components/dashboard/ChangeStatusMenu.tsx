@@ -70,7 +70,8 @@ const ChangeStatusMenu = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant='outline' className='flex items-center gap-2'>
-            Change Status <ChevronDown className='w-4 h-auto' />
+            <span className='hidden md:block'>Change Status </span>
+            <ChevronDown className='w-4 h-auto' />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

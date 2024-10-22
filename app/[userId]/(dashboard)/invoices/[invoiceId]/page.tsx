@@ -18,7 +18,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   }
 
   return (
-    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-10 md:pt-20'>
+    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-10 md:pt-20 overflow-scroll remove-scrollbar'>
       <div className='flex justify-between mb-8'>
         <div className='flex flex-col lg:flex-row lg:items-center gap-4 '>
           <h1 className='text-3xl font-bold flex flex-col'>
@@ -39,12 +39,12 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
             {invoice.status}
           </Badge>
         </div>
-        <div className='flex gap-3 items-center'>
+        <div className='flex flex-col md:flex-row gap-3 items-center'>
           {invoice.status === 'IN_PROGRESS' ||
           invoice.status === 'FULFILLED' ? (
-            <p className='flex gap-2 items-center text-xl font-bold'>
+            <p className='flex gap-2 items-center justify-center text-xl font-bold'>
               <Check className='w-8 h-auto bg-green-600 rounded-full text-white p-1' />
-              Invoice Paid
+              <span className='hidden md:block'>Invoice Paid</span>
             </p>
           ) : (
             ''
