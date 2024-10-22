@@ -61,7 +61,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
                 <ChangeStatusMenu
                   invoiceId={invoiceId as any}
                   currentStatus={invoice.status}
-                  role={session?.user.role!}
+                  role={session!.user.role!}
                 />
               )}
             </div>
