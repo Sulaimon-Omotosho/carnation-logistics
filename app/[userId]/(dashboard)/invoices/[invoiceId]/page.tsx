@@ -18,7 +18,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   }
 
   return (
-    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-10 md:pt-20 overflow-scroll remove-scrollbar'>
+    <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 pb-5 md:px-10 lg:px-24 pt-10 md:pt-20 overflow-scroll remove-scrollbar'>
       <div className='flex justify-between mb-8'>
         <div className='flex flex-col lg:flex-row lg:items-center gap-4 '>
           <h1 className='text-3xl font-bold flex flex-col'>

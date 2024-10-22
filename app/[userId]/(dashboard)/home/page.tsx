@@ -1,19 +1,52 @@
+'use client'
+
 import OrderCalendar from '@/components/dashboard/OrderCalender'
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { invoiceColumns, orders } from '@/constants'
+import { getAllInvoices } from '@/lib/actions/data'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const HomePage = () => {
+  const [invoices, setInvoices] = useState<Orders[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const fetchedInvoices = await getAllInvoices()
+
+        setInvoices(fetchedInvoices)
+      } catch (error) {
+        console.error('Error fetching invoices:', error)
+        setError('Failed to load invoices')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchInvoices()
+  }, [])
+
   const renderRow = (item: Orders) => (
     <TableRow>
       <TableCell>
         <div className='flex'>
           <div className='flex-1'>
-            <div className='font-medium'>{item.company} </div>
+            <div className='font-medium flex justify-between items-center md:block'>
+              {item.company}
+              <div
+                className={cn('rounded-full w-3 h-3 md:hidden', {
+                  'bg-yellow-500': item.status === 'IN_PROGRESS',
+                  'bg-violet-500': item.status === 'FULFILLED',
+                  'bg-red-500': item.status === 'CANCELLED',
+                  'bg-blue-600': item.status === 'PENDING',
+                })}
+              ></div>
+            </div>
             <div className='hidden text-sm text-muted-foreground md:inline'>
               {item.name}
             </div>
@@ -24,10 +57,10 @@ const HomePage = () => {
       <TableCell className='hidden sm:table-cell'>
         <Badge
           className={cn('text-sm capitalize', {
-            'bg-yellow-500': item.status === 'in-progress',
-            'bg-violet-500': item.status === 'fulfilled',
-            'bg-red-500': item.status === 'canceled',
-            'bg-blue-600': item.status === 'pending',
+            'bg-yellow-500': item.status === 'IN_PROGRESS',
+            'bg-green-600': item.status === 'FULFILLED',
+            'bg-red-500': item.status === 'CANCELLED',
+            'bg-blue-600': item.status === 'PENDING',
           })}
           variant={item.status === 'fulfilled' ? 'secondary' : 'outline'}
         >
@@ -45,6 +78,18 @@ const HomePage = () => {
     </TableRow>
   )
 
+  if (loading) {
+    return (
+      <div className='text-center text-2xl'>
+        Loading invoices <span className=' animate-ping'>...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div className='text-center text-2xl'>{error}</div>
+  }
+
   return (
     <div
       className='remove-scrollbar overflow-scroll flex lg:px-4 gap-4 flex-col
@@ -57,12 +102,12 @@ const HomePage = () => {
           description='Recent invoices'
           columns={invoiceColumns}
           renderRow={renderRow}
-          data={orders}
+          data={invoices}
         />
       </div>
       {/* RIGHT SIDE  */}
       <div className='w-full lg:w-1/3 flex flex-col gap-8'>
-        <OrderCalendar />
+        <OrderCalendar invoices={invoices} />
       </div>
     </div>
   )

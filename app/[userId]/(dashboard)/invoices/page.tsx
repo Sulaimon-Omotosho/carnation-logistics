@@ -26,11 +26,6 @@ const InvoicesPage = () => {
       try {
         const fetchedInvoices = await getAllInvoices()
 
-        // const formattedInvoices = fetchedInvoices.map((invoice) => ({
-        //   ...invoice,
-        //   amount: Number(invoice.amount),
-        // }))
-
         setInvoices(fetchedInvoices)
       } catch (error) {
         console.error('Error fetching invoices:', error)
@@ -84,7 +79,7 @@ const InvoicesPage = () => {
           <Badge
             className={cn('text-sm capitalize', {
               'bg-yellow-500': item.status === 'IN_PROGRESS',
-              'bg-violet-500': item.status === 'FULFILLED',
+              'bg-green-600': item.status === 'FULFILLED',
               'bg-red-500': item.status === 'CANCELLED',
               'bg-blue-600': item.status === 'PENDING',
             })}

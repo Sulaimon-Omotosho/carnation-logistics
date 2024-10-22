@@ -61,6 +61,7 @@ const ChangeStatusMenu = ({
     if (currentStatus === 'IN_PROGRESS' && status.id === 'IN_PROGRESS')
       return false
     if (currentStatus === 'FULFILLED' && status.id === 'FULFILLED') return false
+    if (currentStatus === 'PENDING' && status.id === 'FULFILLED') return false
     if (currentStatus === 'CANCELLED' && status.id === 'CANCELLED') return false
     return true
   })
