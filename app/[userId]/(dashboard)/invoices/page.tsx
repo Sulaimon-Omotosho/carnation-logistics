@@ -49,7 +49,18 @@ const InvoicesPage = () => {
         <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <div className='flex'>
             <div className='flex-1'>
-              <div className='font-medium'>{item.company} </div>
+              <div className='font-medium flex justify-between items-center md:block'>
+                {item.company}
+                <div
+                  className={cn('rounded-full w-3 h-3 md:hidden', {
+                    'bg-yellow-500': item.status === 'IN_PROGRESS',
+                    'bg-violet-500': item.status === 'FULFILLED',
+                    'bg-red-500': item.status === 'CANCELLED',
+                    'bg-blue-600': item.status === 'PENDING',
+                  })}
+                ></div>
+              </div>
+
               <div className='hidden text-sm text-muted-foreground md:inline'>
                 {item.name}
               </div>
