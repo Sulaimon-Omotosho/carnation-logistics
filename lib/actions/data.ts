@@ -55,3 +55,42 @@ export const createNewInvoice = async (data: {
 
   // return { success: true }
 }
+
+// GET ALL INVOICES
+export const getAllInvoices = async () => {
+  try {
+    const invoices = await db.invoice.findMany()
+    return invoices.map((invoice) => ({
+      ...invoice,
+      amount:
+        typeof invoice.amount === 'string'
+          ? parseFloat(invoice.amount)
+          : invoice.amount,
+    }))
+  } catch (error) {
+    console.error(error)
+    throw error
+  } finally {
+    await db.$disconnect()
+  }
+}
+
+// GET 1 INVOICE
+export const getInvoice = async (invoiceId: string) => {
+  const id = invoiceId
+  try {
+    const invoice = await db.invoice.findUnique({
+      where: { id },
+    })
+
+    if (!invoice) {
+      throw new Error(`Invoice with ID ${id} not found`)
+    }
+
+    return invoice
+  } catch (error) {
+    console.error('Error fetching invoice:', error)
+  } finally {
+    await db.$disconnect
+  }
+}

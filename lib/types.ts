@@ -10,10 +10,15 @@ export interface Orders {
   company: string
   email?: string
   phone?: string
+  address?: string
   product: string
   status: string
   date: string
   amount: number
+  description?: string
+  creatorId?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export interface Users {

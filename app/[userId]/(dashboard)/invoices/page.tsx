@@ -5,21 +5,46 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { invoiceColumns, orders } from '@/constants'
+import { getAllInvoices } from '@/lib/actions/data'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { CirclePlus } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const InvoicesPage = () => {
   const { data: session } = useSession()
   const userId = session?.user.id
 
-  const invoiceId = 34783
+  const [invoices, setInvoices] = useState<Orders[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const fetchedInvoices = await getAllInvoices()
+
+        // const formattedInvoices = fetchedInvoices.map((invoice) => ({
+        //   ...invoice,
+        //   amount: Number(invoice.amount),
+        // }))
+
+        setInvoices(fetchedInvoices)
+      } catch (error) {
+        console.error('Error fetching invoices:', error)
+        setError('Failed to load invoices')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchInvoices()
+  }, [])
 
   const renderRow = (item: Orders) => (
-    <TableRow>
+    <TableRow key={item.id}>
       <TableCell className='p-0'>
         <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <div className='flex'>
@@ -39,18 +64,18 @@ const InvoicesPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           {item.product}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
-              'bg-yellow-500': item.status === 'in-progress',
-              'bg-violet-500': item.status === 'fulfilled',
-              'bg-red-500': item.status === 'canceled',
-              'bg-blue-600': item.status === 'pending',
+              'bg-yellow-500': item.status === 'IN_PROGRESS',
+              'bg-violet-500': item.status === 'FULFILLED',
+              'bg-red-500': item.status === 'CANCELLED',
+              'bg-blue-600': item.status === 'PENDING',
             })}
             variant={item.status === 'fulfilled' ? 'secondary' : 'outline'}
           >
@@ -59,14 +84,14 @@ const InvoicesPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
-          {item.date}
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
+          {new Date(item.date).toLocaleDateString()}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <span className='font-bold'>N</span>
-          {item.amount.toLocaleString('en-US', {
+          {parseFloat(item.amount as any).toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}
@@ -75,6 +100,18 @@ const InvoicesPage = () => {
     </TableRow>
   )
 
+  if (loading) {
+    return (
+      <div className='text-center text-2xl'>
+        Loading invoices <span className=' animate-ping'>...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div className='text-center text-2xl'>{error}</div>
+  }
+
   return (
     <div className='relative'>
       <TableComponent
@@ -82,7 +119,7 @@ const InvoicesPage = () => {
         description='Recent Invoices'
         columns={invoiceColumns}
         renderRow={renderRow}
-        data={orders}
+        data={invoices}
       />
       <div className='absolute top-7 right-5 md:right-12'>
         <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>

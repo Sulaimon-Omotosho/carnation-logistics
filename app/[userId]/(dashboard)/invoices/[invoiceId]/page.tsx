@@ -1,51 +1,57 @@
 import ChangeStatusMenu from '@/components/dashboard/ChangeStatusMenu'
 import { Badge } from '@/components/ui/badge'
-import { SingleOrder } from '@/lib/types'
+import { getInvoice } from '@/lib/actions/data'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
 const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
-  const invoiceId = parseInt(params.invoiceId)
+  const invoiceId = params.invoiceId
 
-  const invoice: SingleOrder = {
-    name: 'Liam Johnson',
-    company: 'Peak Milk',
-    email: 'liam.johnson@peakmilk.com',
-    phone: '09023456789',
-    product: 'Lagos - Abuja',
-    status: 'Fulfilled',
-    date: '2023-06-23',
-    description: 'Delivery of goods from Lagos to Abuja',
-    amount: 1500000.0,
-    paymentVerified: '7639745',
-    deliveryVerified: '7639745',
+  // const invoice: SingleOrder = {
+  //   name: 'Liam Johnson',
+  //   company: 'Peak Milk',
+  //   email: 'liam.johnson@peakmilk.com',
+  //   phone: '09023456789',
+  //   product: 'Lagos - Abuja',
+  //   status: 'Fulfilled',
+  //   date: '2023-06-23',
+  //   description: 'Delivery of goods from Lagos to Abuja',
+  //   amount: 1500000.0,
+  //   paymentVerified: '7639745',
+  //   deliveryVerified: '7639745',
+  // }
+
+  const invoice = await getInvoice(invoiceId)
+
+  if (!invoice) {
+    return <p className='text-2xl text-center'>Invoice not found</p>
   }
 
   return (
     <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 md:px-10 lg:px-24 pt-10 md:pt-20'>
       <div className='flex justify-between mb-8'>
         <h1 className='flex flex-col lg:flex-row lg:items-center gap-4 text-3xl font-bold'>
-          Invoice #{invoiceId}
+          Invoice #{invoiceId.slice(0, 10)}...
           <Badge
             className={cn(
               'rounded-full capitalize w-fit',
-              invoice.status === 'In Progress' && 'bg-yellow-500',
-              invoice.status === 'Fulfilled' && 'bg-green-600',
-              invoice.status === 'Pending' && 'bg-blue-600',
-              invoice.status === 'Cancelled' && 'bg-red-600'
+              invoice.status === 'IN_PROGRESS' && 'bg-yellow-500',
+              invoice.status === 'FULFILLED' && 'bg-green-600',
+              invoice.status === 'PENDING' && 'bg-blue-600',
+              invoice.status === 'CANCELLED' && 'bg-red-600'
             )}
           >
             {invoice.status}
           </Badge>
         </h1>
         <div className='flex gap-4'>
-          <ChangeStatusMenu invoiceId={invoiceId} />
+          <ChangeStatusMenu invoiceId={invoiceId as any} />
           {/* <MoreOptionsMenu invoiceId={invoiceId} /> */}
         </div>
       </div>
       <p className='text-3xl mb-3'>
         <span className=' font-extrabold'>N</span>
-        {invoice.amount.toLocaleString('en-US', {
+        {parseFloat(invoice.amount).toLocaleString('en-US', {
           minimumFractionDigits: 2,
         })}{' '}
       </p>
@@ -101,13 +107,13 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
             Payment Verified
           </strong>
-          <span>{invoice.paymentVerified} </span>
+          <span>{invoice.paymentVerifiedBy} </span>
         </li>
         <li className='flex gap-4'>
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
             Delivery Verified
           </strong>
-          <span>{invoice.deliveryVerified} </span>
+          <span>{invoice.deliveryVerifiedBy} </span>
         </li>
       </ul>
     </main>
