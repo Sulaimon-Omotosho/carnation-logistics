@@ -138,6 +138,7 @@ export const updateInvoice = async ({
 
     if (newStatus === status.IN_PROGRESS) {
       updateData.paymentVerifiedBy = session?.user.id
+      updateData.deliveryVerifiedBy = ''
     }
 
     if (newStatus === status.FULFILLED) {

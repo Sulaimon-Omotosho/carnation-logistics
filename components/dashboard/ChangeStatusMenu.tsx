@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '../ui/button'
 
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, LoaderCircle } from 'lucide-react'
 import { statuses } from '@/constants'
 import { updateInvoice } from '@/lib/actions/data'
 import { useState } from 'react'
@@ -26,9 +26,11 @@ const ChangeStatusMenu = ({
   const [showModal, setShowModal] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
   const [note, setNote] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleStatusChange = (newStatus: string) => {
     if (!selectedStatus) return
+    setIsLoading(true)
 
     updateInvoice({
       invoiceId,
@@ -44,6 +46,7 @@ const ChangeStatusMenu = ({
           console.log('Invoice update successful')
           setShowModal(false)
         }
+        window.location.reload()
       })
       .catch((error) => console.error(error))
   }
@@ -100,8 +103,17 @@ const ChangeStatusMenu = ({
               <Button variant='secondary' onClick={() => setShowModal(false)}>
                 Cancel
               </Button>
-              <Button onClick={() => handleStatusChange(selectedStatus!)}>
-                Confirm
+              <Button
+                onClick={() => handleStatusChange(selectedStatus!)}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <p className='flex gap-1'>
+                    Loading <LoaderCircle className='animate-spin' />
+                  </p>
+                ) : (
+                  'Confirm'
+                )}
               </Button>
             </div>
           </div>
