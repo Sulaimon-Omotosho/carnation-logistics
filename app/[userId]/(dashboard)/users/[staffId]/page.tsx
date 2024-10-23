@@ -5,19 +5,50 @@ import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableCell, TableRow } from '@/components/ui/table'
 import { invoiceColumns, orders } from '@/constants'
-import { Orders } from '@/lib/types'
+import { getUser } from '@/lib/actions/data'
+import { Orders, Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { BookX, FileCheck2, FilePlus2, Loader, Mail, Phone } from 'lucide-react'
+import {
+  BookX,
+  CircleUserRound,
+  FileCheck2,
+  FilePlus2,
+  Loader,
+  Mail,
+  Phone,
+} from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const invoiceId = '76934'
 
-const UserPage = () => {
+const UserPage = ({ params }: { params: { staffId: string } }) => {
   const { data: session } = useSession()
   const userId = session?.user.id
+  const staffId = params.staffId
+
+  const [user, setUser] = useState<Users>()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData: Users = await getUser(staffId)
+        console.log('Data:', userData)
+
+        setUser(userData as any)
+      } catch (error) {
+        console.error('Error fetching user:', error)
+        setError('Failed to load user')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchUser()
+  }, [staffId])
 
   const renderRow = (item: Orders) => (
     <TableRow>
@@ -70,6 +101,18 @@ const UserPage = () => {
     </TableRow>
   )
 
+  if (loading) {
+    return (
+      <div className='text-center text-2xl'>
+        Loading User <span className=' animate-ping'>...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div className='text-center text-2xl'>{error}</div>
+  }
+
   return (
     <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] overflow-scroll remove-scrollbar p-2 lg:p-4 flex flex-col lg:flex-row lg:gap-4'>
       {/* LEFT  */}
@@ -78,18 +121,35 @@ const UserPage = () => {
         <div className='flex flex-col lg:flex-row gap-4'>
           {/* USER INFO CARD  */}
           <div className='py-6 px-4 rounded-md flex-1 flex gap-4 bg-slate-400 dark:bg-slate-700'>
-            <div className='w-1/3'>
-              <Image
-                src='https://images.pexels.com/photos/2888150/pexels-photo-2888150.jpeg?auto=compress&cs=tinysrgb&w=1200'
-                alt='teacher'
-                width={144}
-                height={144}
-                className='w-36 h-36 rounded-full object-cover'
-              />
+            <div className='w-1/3 flex flex-col gap-2 items-center justify-center'>
+              {user?.image && typeof user.image === 'string' ? (
+                <Image
+                  src={user?.image}
+                  alt='teacher'
+                  width={144}
+                  height={144}
+                  className='w-36 h-36 rounded-full object-cover'
+                />
+              ) : (
+                <CircleUserRound className='w-20 h-20' />
+              )}
+              <Badge
+                className={cn('text-sm capitalize', {
+                  'bg-yellow-500': user?.role.toLocaleUpperCase() === 'USER',
+                  'bg-violet-500': user?.role.toLocaleUpperCase() === 'ADMIN',
+                  'bg-blue-600':
+                    user?.role.toLocaleUpperCase() === 'SUPERVISOR',
+                })}
+                // variant={
+                //   users.role === 'fulfilled' ? 'secondary' : 'outline'
+                // }
+              >
+                {user?.role}
+              </Badge>
             </div>
             <div className='w-2/3 flex flex-col justify-between gap-4'>
               <div className='flex items-center gap-4'>
-                <h1 className='text-xl font-semibold'>John Doe</h1>
+                <h1 className='text-xl font-semibold'>{user?.name}</h1>
                 {/* <FormModal
                   table='teacher'
                   type='update'
@@ -111,17 +171,16 @@ const UserPage = () => {
                 /> */}
               </div>
               <p className='text-sm text-gray-700 dark:text-gray-400'>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias
-                quas voluptatum quidem?
+                {user?.notes}
               </p>
               <div className='flex flex-col items-center justify-between gap-2 flex-wrap text-xs font-medium'>
                 <div className='w-full flex items-center gap-2'>
                   <Mail className='w-4 h-4' />
-                  <span>user@carnationregistrars.com</span>
+                  <span>{user?.email}</span>
                 </div>
                 <div className='w-full flex items-center gap-2'>
                   <Phone className='w-4 h-4' />
-                  <span>+234 567 890 1234</span>
+                  <span>{user?.phone}</span>
                 </div>
               </div>
             </div>
@@ -174,8 +233,8 @@ const UserPage = () => {
         <div className='mt-4 rounded-md md:px-4 py-4'>
           {/* <BigCalendar /> */}
           <TableComponent
-            title="John Doe's Receipts"
-            description='Recent Invoices from John Doe'
+            title={`${user?.name}'s Receipts`}
+            description={`Recent Invoices from ${user?.name}`}
             columns={invoiceColumns}
             renderRow={renderRow}
             data={orders}

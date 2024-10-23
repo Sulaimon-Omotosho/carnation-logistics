@@ -28,6 +28,7 @@ export interface Users {
   role: 'ADMIN' | 'SUPERVISOR' | 'USER'
   position: string
   userId?: string
+  id: string
   address?: string
   image?: File
   notes?: string

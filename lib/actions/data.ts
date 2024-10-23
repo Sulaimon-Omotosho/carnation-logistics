@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '../auth'
 import { v4 as uuidv4 } from 'uuid'
 import { Users } from '../types'
-import cloudinary from '../cloudinary'
 
 const db = new PrismaClient()
 
@@ -180,5 +179,26 @@ export const getAllUsers = async (): Promise<Users[]> => {
     throw error
   } finally {
     await db.$disconnect()
+  }
+}
+
+// GET A USER
+export const getUser = async (staffId: string): Promise<Users> => {
+  const id = staffId
+  try {
+    const user = await db.user.findUnique({
+      where: { id },
+    })
+
+    if (!user) {
+      throw new Error(`User with ID ${id} not found`)
+    }
+
+    return user as any
+  } catch (error) {
+    console.error('Error fetching user:', error)
+    throw error
+  } finally {
+    await db.$disconnect
   }
 }

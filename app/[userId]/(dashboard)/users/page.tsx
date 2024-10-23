@@ -42,10 +42,7 @@ const UsersPage = () => {
   const renderRow = (items: Users) => (
     <TableRow>
       <TableCell className=' p-0'>
-        <Link
-          href={`/${userId}/users/${items.userId}`}
-          className='p-4 flex gap-4'
-        >
+        <Link href={`/${userId}/users/${items.id}`} className='p-4 flex gap-4'>
           {items.image && typeof items.image === 'string' ? (
             <Image
               src={items.image}
@@ -66,12 +63,12 @@ const UsersPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.id}`} className='block p-4'>
           {items.phone}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.id}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
               'bg-yellow-500': items.role.toLocaleUpperCase() === 'USER',
@@ -87,13 +84,13 @@ const UsersPage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
+        <Link href={`/${userId}/users/${items.id}`} className='block p-4'>
           {items.position}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
-          {items.userId}
+        <Link href={`/${userId}/users/${items.id}`} className='block p-4'>
+          {items.id.slice(0, 7)}...
         </Link>
       </TableCell>
     </TableRow>
