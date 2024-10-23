@@ -55,33 +55,10 @@ const CreateUserForm = () => {
     return result.secure_url
   }
 
-  // const onSubmit = async (data: z.infer<typeof UserFormValidation>) => {
-  //   setIsLoading(true)
-
-  //   try {
-  //     console.log(data)
-  //     console.log('image file:', image)
-  //   } catch (error) {
-  //     console.error('Error creating user:', error)
-  //     throw error
-  //   } finally {
-  //     setIsLoading(false)
-  //   }
-  // }
-
   const onSubmit = async (data: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true)
 
     let imageUrl = ''
-    // if (image) {
-    //   const uploadResult = await uploadImage(image as any)
-    //   if (uploadResult.secure_url) {
-    //     imageUrl = (uploadResult as any).secure_url
-    //   } else {
-    //     setUserError('Image upload failed')
-    //     return
-    //   }
-    // }
     try {
       if (image) {
         const file = image as File

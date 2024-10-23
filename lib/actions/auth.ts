@@ -35,7 +35,7 @@ export const CreateNewUser = async ({
   data,
   imageUrl,
 }: {
-  data: Users
+  data: Omit<Users, 'id'>
   imageUrl: any
 }) => {
   const session = await getServerSession(authOptions)
