@@ -31,8 +31,15 @@ export const login = async (provider: string) => {
 }
 
 // CREATE USER
-export const CreateNewUser = async ({ data }: { data: Users }) => {
+export const CreateNewUser = async ({
+  data,
+  imageUrl,
+}: {
+  data: Users
+  imageUrl: any
+}) => {
   const session = await getServerSession(authOptions)
+  console.log('Create user triggered')
 
   if (session?.user.role !== 'ADMIN') {
     return { error: 'User not authenticated' }
@@ -44,8 +51,8 @@ export const CreateNewUser = async ({ data }: { data: Users }) => {
   }
 
   const hash = saltAndHashPassword(data.password)
-
   const userRole: UserRole = data.role as UserRole
+
   const newUser = await db.user.create({
     data: {
       name: data.name,
@@ -56,6 +63,7 @@ export const CreateNewUser = async ({ data }: { data: Users }) => {
       role: userRole,
       address: data.address,
       notes: data.notes,
+      image: imageUrl,
     },
   })
 

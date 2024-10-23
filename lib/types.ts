@@ -29,7 +29,7 @@ export interface Users {
   position: string
   userId?: string
   address?: string
-  image?: string
+  image?: File
   notes?: string
   password?: string
 }

@@ -22,6 +22,15 @@ export const UserFormValidation = z.object({
   }),
   address: z.string(),
   notes: z.string().optional(),
+  image: z
+    .any()
+    .optional()
+    .refine((file) => {
+      if (file) {
+        return file instanceof File && file.size <= 5 * 1024 * 1024
+      }
+      return true
+    }, 'Image file must be less than 5MB'),
 })
 
 export const LoginFormValidation = z.object({

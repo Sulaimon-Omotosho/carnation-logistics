@@ -5,6 +5,8 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from '../auth'
 import { v4 as uuidv4 } from 'uuid'
+import { Users } from '../types'
+import cloudinary from '../cloudinary'
 
 const db = new PrismaClient()
 
@@ -160,5 +162,23 @@ export const updateInvoice = async ({
   } catch (error) {
     console.error('Error updating invoice:', error)
     return { error: 'Failed to update invoice' }
+  }
+}
+
+// GET ALL USERS
+export const getAllUsers = async (): Promise<Users[]> => {
+  try {
+    const users = await db.user.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    })
+
+    return users as any
+  } catch (error) {
+    console.error(error)
+    throw error
+  } finally {
+    await db.$disconnect()
   }
 }

@@ -17,6 +17,7 @@ const CreateUserForm = () => {
   const [error, setError] = useState('')
   const [userError, setUserError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [image, setImage] = useState<File | null>(null)
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -27,11 +28,69 @@ const CreateUserForm = () => {
     },
   })
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    setImage(file)
+  }
+
+  const uploadImageToCloudinary = async (image: File): Promise<string> => {
+    const formData = new FormData()
+    formData.append('file', image)
+    formData.append('upload_preset', 'carnation') // Replace with your Cloudinary preset
+
+    const response = await fetch(
+      'https://api.cloudinary.com/v1_1/dtjtev5lc/image/upload', // Replace with your Cloudinary URL
+      {
+        method: 'POST',
+        body: formData,
+      }
+    )
+
+    const result = await response.json()
+
+    if (result.error) {
+      throw new Error(result.error.message)
+    }
+
+    return result.secure_url
+  }
+
+  // const onSubmit = async (data: z.infer<typeof UserFormValidation>) => {
+  //   setIsLoading(true)
+
+  //   try {
+  //     console.log(data)
+  //     console.log('image file:', image)
+  //   } catch (error) {
+  //     console.error('Error creating user:', error)
+  //     throw error
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
+
   const onSubmit = async (data: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true)
 
+    let imageUrl = ''
+    // if (image) {
+    //   const uploadResult = await uploadImage(image as any)
+    //   if (uploadResult.secure_url) {
+    //     imageUrl = (uploadResult as any).secure_url
+    //   } else {
+    //     setUserError('Image upload failed')
+    //     return
+    //   }
+    // }
     try {
-      const response = await CreateNewUser({ data })
+      if (image) {
+        const file = image as File
+        imageUrl = await uploadImageToCloudinary(file)
+      }
+
+      console.log('url;', imageUrl)
+
+      const response = await CreateNewUser({ data, imageUrl })
 
       if (response?.error) {
         setUserError(response.error)
@@ -155,6 +214,21 @@ const CreateUserForm = () => {
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
           )}
         </div>
+
+        <div className='relative'>
+          <label htmlFor='image' className='block text-sm font-medium'>
+            Profile Image
+          </label>
+          <input
+            id='image'
+            type='file'
+            name='image'
+            // accept='image/*'
+            onChange={handleImageChange}
+            className='block w-full text-sm border-gray-400 rounded-md'
+          />
+        </div>
+
         <div className='relative'>
           <CustomFormField
             fieldType={FormFieldType.TEXTAREA}

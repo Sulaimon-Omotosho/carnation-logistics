@@ -4,18 +4,40 @@ import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { users, usersColumns } from '@/constants'
+import { usersColumns } from '@/constants'
+import { getAllUsers } from '@/lib/actions/data'
 import { Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { CirclePlus } from 'lucide-react'
+import { CirclePlus, CircleUserRound } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const UsersPage = () => {
   const { data: session } = useSession()
   const userId = session?.user.id
+
+  const [users, setUsers] = useState<Users[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers: Users[] = await getAllUsers()
+
+        setUsers(fetchedUsers)
+      } catch (error) {
+        console.error('Error fetching users:', error)
+        setError('Failed to load users')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
 
   const renderRow = (items: Users) => (
     <TableRow>
@@ -24,13 +46,17 @@ const UsersPage = () => {
           href={`/${userId}/users/${items.userId}`}
           className='p-4 flex gap-4'
         >
-          <Image
-            src={items.image!}
-            height={100}
-            width={100}
-            alt='profile image'
-            className='h-12 w-12 rounded-full border-2 border-gray-400 object-cover'
-          />
+          {items.image ? (
+            <Image
+              src={items.image}
+              width={100}
+              height={100}
+              alt='Profile Image'
+              className='w-7 lg:w-10 h-7 lg:h-10 rounded-full object-fit border-2 border-gray-400'
+            />
+          ) : (
+            <CircleUserRound className='w-7 h-7 lg:w-10 lg:h-10' />
+          )}
           <div className=''>
             <div className='font-medium'>{items.name} </div>
             <div className='hidden text-sm text-muted-foreground md:inline'>
@@ -48,9 +74,9 @@ const UsersPage = () => {
         <Link href={`/${userId}/users/${items.userId}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
-              'bg-yellow-500': items.role === 'USER',
-              'bg-violet-500': items.role === 'ADMIN',
-              'bg-blue-600': items.role === 'SUPERVISOR',
+              'bg-yellow-500': items.role.toLocaleUpperCase() === 'USER',
+              'bg-violet-500': items.role.toLocaleUpperCase() === 'ADMIN',
+              'bg-blue-600': items.role.toLocaleUpperCase() === 'SUPERVISOR',
             })}
             // variant={
             //   users.role === 'fulfilled' ? 'secondary' : 'outline'
@@ -72,6 +98,18 @@ const UsersPage = () => {
       </TableCell>
     </TableRow>
   )
+
+  if (loading) {
+    return (
+      <div className='text-center text-2xl'>
+        Loading Users <span className=' animate-ping'>...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return <div className='text-center text-2xl'>{error}</div>
+  }
 
   return (
     <div className='relative'>
