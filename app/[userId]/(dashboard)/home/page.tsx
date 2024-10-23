@@ -67,7 +67,9 @@ const HomePage = () => {
           {item.status}
         </Badge>
       </TableCell>
-      <TableCell className='hidden md:table-cell'>{item.date}</TableCell>
+      <TableCell className='hidden md:table-cell'>
+        {new Date(item.date).toLocaleDateString('en-Us')}
+      </TableCell>
       <TableCell className='text-right'>
         <span className='font-bold'>N</span>
         {item.amount.toLocaleString('en-US', {

@@ -5,7 +5,7 @@ import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableCell, TableRow } from '@/components/ui/table'
 import { invoiceColumns, orders } from '@/constants'
-import { getUser } from '@/lib/actions/data'
+import { getUser, usersInvoices } from '@/lib/actions/data'
 import { Orders, Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import {
@@ -22,24 +22,42 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
-const invoiceId = '76934'
-
 const UserPage = ({ params }: { params: { staffId: string } }) => {
   const { data: session } = useSession()
   const userId = session?.user.id
   const staffId = params.staffId
 
-  const [user, setUser] = useState<Users>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const [user, setUser] = useState<Users>()
+  const [invoices, setInvoices] = useState<Orders[]>()
+
+  const [totalInvoices, setTotalInvoices] = useState(0)
+  const [inProgressCount, setInProgressCount] = useState(0)
+  const [fulfilledCount, setFulfilledCount] = useState(0)
+  const [cancelledCount, setCancelledCount] = useState(0)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData: Users = await getUser(staffId)
-        console.log('Data:', userData)
+        const fetchedUserInvoices: Orders[] = await usersInvoices(staffId)
 
-        setUser(userData as any)
+        setUser(userData)
+        setInvoices(fetchedUserInvoices)
+
+        setTotalInvoices(fetchedUserInvoices.length)
+        setInProgressCount(
+          fetchedUserInvoices.filter((inv) => inv.status === 'IN_PROGRESS')
+            .length
+        )
+        setFulfilledCount(
+          fetchedUserInvoices.filter((inv) => inv.status === 'FULFILLED').length
+        )
+        setCancelledCount(
+          fetchedUserInvoices.filter((inv) => inv.status === 'CANCELLED').length
+        )
       } catch (error) {
         console.error('Error fetching user:', error)
         setError('Failed to load user')
@@ -53,7 +71,7 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
   const renderRow = (item: Orders) => (
     <TableRow>
       <TableCell className='p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <div className='flex'>
             <div className='flex-1'>
               <div className='font-medium'>{item.company} </div>
@@ -65,18 +83,18 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           {item.product}
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <Badge
             className={cn('text-sm capitalize', {
-              'bg-yellow-500': item.status === 'in-progress',
-              'bg-violet-500': item.status === 'fulfilled',
-              'bg-red-500': item.status === 'canceled',
-              'bg-blue-600': item.status === 'pending',
+              'bg-yellow-500': item.status === 'IN_PROGRESS',
+              'bg-green-600': item.status === 'FULFILLED',
+              'bg-red-500': item.status === 'CANCELLED',
+              'bg-blue-600': item.status === 'PENDING',
             })}
             variant={item.status === 'fulfilled' ? 'secondary' : 'outline'}
           >
@@ -85,12 +103,12 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
         </Link>
       </TableCell>
       <TableCell className='hidden md:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
-          {item.date}
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
+          {new Date(item.date).toLocaleDateString('en-US')}
         </Link>
       </TableCell>
       <TableCell className='text-right p-0'>
-        <Link href={`/${userId}/invoices/${invoiceId}`} className='block p-4'>
+        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <span className='font-bold'>N</span>
           {item.amount.toLocaleString('en-US', {
             minimumFractionDigits: 2,
@@ -191,7 +209,7 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
             <div className='w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%] items-center bg-slate-400 dark:bg-slate-700'>
               <FilePlus2 className='h-10 w-10' />
               <div className=''>
-                <h1 className='text-xl font-semibold'>123</h1>
+                <h1 className='text-xl font-semibold'>{totalInvoices}</h1>
                 <span className=' text-sm text-gray-700 dark:text-gray-400'>
                   Receipts
                 </span>
@@ -201,7 +219,7 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
             <div className='w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%] items-center bg-slate-400 dark:bg-slate-700'>
               <Loader className='h-10 w-10' />
               <div className=''>
-                <h1 className='text-xl font-semibold'>50</h1>
+                <h1 className='text-xl font-semibold'>{inProgressCount}</h1>
                 <span className=' text-sm text-gray-700 dark:text-gray-400'>
                   In Progress
                 </span>
@@ -211,7 +229,7 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
             <div className='w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%] items-center bg-slate-400 dark:bg-slate-700'>
               <FileCheck2 className='h-10 w-10' />
               <div className=''>
-                <h1 className='text-xl font-semibold'>65</h1>
+                <h1 className='text-xl font-semibold'>{fulfilledCount}</h1>
                 <span className=' text-sm text-gray-700 dark:text-gray-400'>
                   Fulfilled
                 </span>
@@ -221,7 +239,7 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
             <div className='w-full p-4 rounded-md flex gap-4 md:w-[48%] xl:w-[45%] 2xl:w-[48%] items-center bg-slate-400 dark:bg-slate-700'>
               <BookX className='h-10 w-10' />
               <div className=''>
-                <h1 className='text-xl font-semibold'>8</h1>
+                <h1 className='text-xl font-semibold'>{cancelledCount}</h1>
                 <span className=' text-sm text-gray-700 dark:text-gray-400'>
                   Cancelled
                 </span>
@@ -237,13 +255,18 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
             description={`Recent Invoices from ${user?.name}`}
             columns={invoiceColumns}
             renderRow={renderRow}
-            data={orders}
+            data={invoices!}
           />
         </div>
       </div>
       {/* RIGHT  */}
       <div className='w-full xl:w-1/3 flex flex-col gap-4'>
-        <Performance />
+        <Performance
+          inProgress={inProgressCount}
+          fulfilled={fulfilledCount}
+          cancelled={cancelledCount}
+          total={totalInvoices}
+        />
         {/* <Announcement /> */}
       </div>
     </main>

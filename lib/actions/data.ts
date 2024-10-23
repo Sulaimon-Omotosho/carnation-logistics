@@ -202,3 +202,31 @@ export const getUser = async (staffId: string): Promise<Users> => {
     await db.$disconnect
   }
 }
+
+// GET ALL USER INVOICES
+export const usersInvoices = async (staffId: string) => {
+  const id = staffId
+  try {
+    const userInvoices = await db.invoice.findMany({
+      where: {
+        createdBy: { id },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    return userInvoices.map((invoice) => ({
+      ...invoice,
+      amount:
+        typeof invoice.amount === 'string'
+          ? parseFloat(invoice.amount)
+          : invoice.amount,
+    }))
+  } catch (error) {
+    console.error(error)
+    throw error
+  } finally {
+    await db.$disconnect
+  }
+}

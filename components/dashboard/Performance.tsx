@@ -4,13 +4,13 @@ import { Ellipsis } from 'lucide-react'
 import Image from 'next/image'
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts'
 
-const data = [
-  { name: 'In Progress', value: 50, fill: '#C3EBFA' },
-  { name: 'Fulfilled', value: 65, fill: '#FAE27C' },
-  { name: 'Cancelled', value: 8, fill: '#DC143C' },
-]
+const Performance = ({ inProgress, fulfilled, cancelled, total }: any) => {
+  const data = [
+    { name: 'In Progress', value: inProgress, fill: '#C3EBFA' },
+    { name: 'Fulfilled', value: fulfilled, fill: '#FAE27C' },
+    { name: 'Cancelled', value: cancelled, fill: '#DC143C' },
+  ]
 
-const Performance = () => {
   return (
     <div className='bg-white dark:bg-slate-700 p-4 rounded-md h-80 relative'>
       <div className='flex items-center justify-between'>
@@ -34,7 +34,7 @@ const Performance = () => {
       </ResponsiveContainer>
       <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center'>
         <p className='text-xs text-gray-300'>of</p>
-        <h1 className='text-3xl font-bold'>123</h1>
+        <h1 className='text-3xl font-bold'>{total}</h1>
       </div>
       <h2 className='font-medium absolute bottom-16 left-0 right-0 m-auto text-center'>
         January - November 2024
