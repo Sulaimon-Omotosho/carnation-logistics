@@ -46,7 +46,7 @@ const UsersPage = () => {
           href={`/${userId}/users/${items.userId}`}
           className='p-4 flex gap-4'
         >
-          {items.image ? (
+          {items.image && typeof items.image === 'string' ? (
             <Image
               src={items.image}
               width={100}
