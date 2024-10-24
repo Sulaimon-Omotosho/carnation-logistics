@@ -6,8 +6,8 @@ import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts'
 
 const Performance = ({ inProgress, fulfilled, cancelled, total }: any) => {
   const data = [
-    { name: 'In Progress', value: inProgress, fill: '#C3EBFA' },
-    { name: 'Fulfilled', value: fulfilled, fill: '#FAE27C' },
+    { name: 'In Progress', value: inProgress, fill: '#FAE27C' },
+    { name: 'Fulfilled', value: fulfilled, fill: '#32CD32' },
     { name: 'Cancelled', value: cancelled, fill: '#DC143C' },
   ]
 

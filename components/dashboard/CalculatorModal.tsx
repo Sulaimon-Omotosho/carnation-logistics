@@ -4,7 +4,7 @@ import { Calculator, X } from 'lucide-react'
 import React, { useState } from 'react'
 import PriceCalculator from '../PriceCalculator'
 
-const FormModal = () => {
+const CalculatorModal = () => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -33,4 +33,4 @@ const FormModal = () => {
   )
 }
 
-export default FormModal
+export default CalculatorModal

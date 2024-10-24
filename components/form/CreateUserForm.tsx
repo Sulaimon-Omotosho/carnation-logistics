@@ -36,10 +36,11 @@ const CreateUserForm = () => {
   const uploadImageToCloudinary = async (image: File): Promise<string> => {
     const formData = new FormData()
     formData.append('file', image)
-    formData.append('upload_preset', 'carnation') // Replace with your Cloudinary preset
+    formData.append('upload_preset', 'carnation')
+    formData.append('folder', 'carnation')
 
     const response = await fetch(
-      'https://api.cloudinary.com/v1_1/dtjtev5lc/image/upload', // Replace with your Cloudinary URL
+      'https://api.cloudinary.com/v1_1/dtjtev5lc/image/upload',
       {
         method: 'POST',
         body: formData,
@@ -200,7 +201,6 @@ const CreateUserForm = () => {
             id='image'
             type='file'
             name='image'
-            // accept='image/*'
             onChange={handleImageChange}
             className='block w-full text-sm border-gray-400 rounded-md'
           />

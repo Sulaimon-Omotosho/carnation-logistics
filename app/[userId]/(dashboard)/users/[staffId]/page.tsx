@@ -2,9 +2,10 @@
 
 import Performance from '@/components/dashboard/Performance'
 import TableComponent from '@/components/dashboard/Table'
+import FormModal from '@/components/form/FormModal'
 import { Badge } from '@/components/ui/badge'
-import { Table, TableCell, TableRow } from '@/components/ui/table'
-import { invoiceColumns, orders } from '@/constants'
+import { TableCell, TableRow } from '@/components/ui/table'
+import { invoiceColumns } from '@/constants'
 import { getUser, usersInvoices } from '@/lib/actions/data'
 import { Orders, Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -74,7 +75,17 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
         <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
           <div className='flex'>
             <div className='flex-1'>
-              <div className='font-medium'>{item.company} </div>
+              <div className='font-medium flex justify-between items-center md:block'>
+                {item.company}
+                <div
+                  className={cn('rounded-full w-3 h-3 md:hidden', {
+                    'bg-yellow-500': item.status === 'IN_PROGRESS',
+                    'bg-violet-500': item.status === 'FULFILLED',
+                    'bg-red-500': item.status === 'CANCELLED',
+                    'bg-blue-600': item.status === 'PENDING',
+                  })}
+                ></div>
+              </div>
               <div className='hidden text-sm text-muted-foreground md:inline'>
                 {item.name}
               </div>
@@ -168,25 +179,20 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
             <div className='w-2/3 flex flex-col justify-between gap-4'>
               <div className='flex items-center gap-4'>
                 <h1 className='text-xl font-semibold'>{user?.name}</h1>
-                {/* <FormModal
-                  table='teacher'
-                  type='update'
+                <FormModal
                   data={{
-                    id: 1,
-                    username: 'john67890',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    password: 'testing123',
-                    email: 'john@doe.com',
-                    photo:
-                      'https://images.pexels.com/photos/2888150/pexels-photo-2888150.jpeg?auto=compress&cs=tinysrgb&w=1200',
-                    phone: '1234567890',
-                    bloodType: 'A',
-                    birthday: 12 / 25 / 1990,
-                    sex: 'male',
-                    address: '123 Main St, Anytown, USA',
+                    id: user?.id,
+                    name: user?.name,
+                    password: 'Type New Password',
+                    email: user?.email,
+                    photo: user?.image,
+                    phone: user?.phone,
+                    address: user?.address,
+                    position: user?.position,
+                    role: user?.role,
+                    notes: user?.notes,
                   }}
-                /> */}
+                />
               </div>
               <p className='text-sm text-gray-700 dark:text-gray-400'>
                 {user?.notes}

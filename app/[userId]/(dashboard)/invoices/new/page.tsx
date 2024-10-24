@@ -1,4 +1,4 @@
-import FormModal from '@/components/dashboard/FormModal'
+import CalculatorModal from '@/components/dashboard/CalculatorModal'
 import CreateInvoiceForm from '@/components/form/CreateInvoiceForm'
 
 const NewInvoicePage = () => {
@@ -7,7 +7,7 @@ const NewInvoicePage = () => {
       <div className='w-full'>
         <div className='flex justify-between mb-6'>
           <h1 className='text-3xl font-bold'>Create Invoice</h1>
-          <FormModal />
+          <CalculatorModal />
         </div>
         <CreateInvoiceForm />
       </div>
