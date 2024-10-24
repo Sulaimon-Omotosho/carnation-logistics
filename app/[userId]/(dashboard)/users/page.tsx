@@ -8,7 +8,7 @@ import { usersColumns } from '@/constants'
 import { getAllUsers } from '@/lib/actions/data'
 import { Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { CirclePlus, CircleUserRound } from 'lucide-react'
+import { CirclePlus, CircleUserRound, Loader } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -98,8 +98,9 @@ const UsersPage = () => {
 
   if (loading) {
     return (
-      <div className='text-center text-2xl'>
-        Loading Users <span className=' animate-ping'>...</span>
+      <div className='text-center text-2xl flex gap-1 items-center justify-center'>
+        Loading Users
+        <Loader className='animate-spin' />
       </div>
     )
   }

@@ -73,12 +73,15 @@ const Sidebar = () => {
                 <CircleUserRound className='w-10 h-10' />
               )}
 
-              <p className='hidden lg:flex font-semibold flex-col'>
+              <Link
+                href={`/${userId}/profile`}
+                className='hidden lg:flex font-semibold flex-col p-1'
+              >
                 {session?.user.name}
                 <span className='font-thin text-xs capitalize'>
                   {session?.user.role?.toLowerCase()}
                 </span>
-              </p>
+              </Link>
             </div>
             <ModeToggle />
           </div>

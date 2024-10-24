@@ -140,6 +140,12 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
           </h2>
           <ul className='grid gap-2'>
             <li className='flex gap-4'>
+              <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+                Created By
+              </strong>
+              <span>{invoice.creatorId} </span>
+            </li>
+            <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm text-red-600'>
                 Cancelled By
               </strong>
@@ -159,6 +165,12 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
           <ul className='grid gap-2'>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
+                Created By
+              </strong>
+              <span>{invoice.creatorId} </span>
+            </li>
+            <li className='flex gap-4'>
+              <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Payment Verified
               </strong>
               <span>{invoice.paymentVerifiedBy} </span>
@@ -172,8 +184,16 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
           </ul>
         </>
       )}
+      {invoice.status === 'CANCELLED' ||
+        (invoice.cancelledBy && (
+          <div className='flex gap-4 bg-red-600 w-fit p-2 rounded-lg text-white'>
+            <strong className='block w-28 flex-shrink-0 font-medium text-sm '>
+              Once Cancelled By
+            </strong>
+            <span className=''>{invoice.cancelledBy} </span>
+          </div>
+        ))}
     </main>
-    // <div className=''>{invoiceId} </div>
   )
 }
 

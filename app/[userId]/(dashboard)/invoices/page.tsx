@@ -4,14 +4,14 @@ import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { invoiceColumns, orders } from '@/constants'
+import { invoiceColumns } from '@/constants'
 import { getAllInvoices } from '@/lib/actions/data'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { CirclePlus } from 'lucide-react'
+import { CirclePlus, Loader } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const InvoicesPage = () => {
   const { data: session } = useSession()
@@ -20,12 +20,15 @@ const InvoicesPage = () => {
   const [invoices, setInvoices] = useState<Orders[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isFetching, setIsFetching] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const fetchedInvoices = await getAllInvoices()
-
+        const fetchedInvoices = await getAllInvoices(0, 10)
         setInvoices(fetchedInvoices)
       } catch (error) {
         console.error('Error fetching invoices:', error)
@@ -34,9 +37,52 @@ const InvoicesPage = () => {
         setLoading(false)
       }
     }
-
     fetchInvoices()
   }, [])
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current
+
+    const handleScroll = () => {
+      if (!scrollContainer || isFetching || !hasMore) return
+
+      const scrollTop = scrollContainer.scrollTop
+      const scrollHeight = scrollContainer.scrollHeight
+      const clientHeight = scrollContainer.clientHeight
+
+      if (scrollHeight - scrollTop <= clientHeight + 300) {
+        fetchMoreInvoices()
+      }
+    }
+
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll)
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [invoices, isFetching, hasMore])
+
+  const fetchMoreInvoices = async () => {
+    setIsFetching(true)
+    try {
+      const offset = invoices.length
+      const fetchedInvoices = await getAllInvoices(offset, 10)
+
+      if (fetchedInvoices.length === 0) {
+        setHasMore(false)
+      } else {
+        setInvoices((prevInvoices) => [...prevInvoices, ...fetchedInvoices])
+      }
+    } catch (error) {
+      console.error('Error fetching more invoices:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
 
   const renderRow = (item: Orders) => (
     <TableRow key={item.id}>
@@ -108,8 +154,9 @@ const InvoicesPage = () => {
 
   if (loading) {
     return (
-      <div className='text-center text-2xl'>
-        Loading invoices <span className=' animate-ping'>...</span>
+      <div className='text-center text-2xl flex gap-1 items-center justify-center'>
+        Loading Invoices
+        <Loader className='animate-spin' />
       </div>
     )
   }
@@ -126,6 +173,8 @@ const InvoicesPage = () => {
         columns={invoiceColumns}
         renderRow={renderRow}
         data={invoices}
+        scrollContainerRef={scrollContainerRef}
+        isFetching={isFetching}
       />
       <div className='absolute top-7 right-5 md:right-12'>
         <Button className='inline-flex gap-2 text-xl' variant={'ghost'} asChild>

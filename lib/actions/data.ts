@@ -65,9 +65,11 @@ export const createNewInvoice = async (data: {
 }
 
 // GET ALL INVOICES
-export const getAllInvoices = async () => {
+export const getAllInvoices = async (offset = 0, limit = 10) => {
   try {
     const invoices = await db.invoice.findMany({
+      skip: offset,
+      take: limit,
       orderBy: {
         createdAt: 'desc',
       },

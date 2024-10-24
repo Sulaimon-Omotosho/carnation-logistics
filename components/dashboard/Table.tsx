@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import TablePagination from '../Pagination'
 import {
   Card,
   CardContent,
@@ -10,7 +8,8 @@ import {
   CardTitle,
 } from '../ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '../ui/table'
-import { Columns, Orders } from '@/lib/types'
+import { Columns } from '@/lib/types'
+import { Loader } from 'lucide-react'
 
 type TableComponentProps<T> = {
   columns: Columns[]
@@ -18,7 +17,10 @@ type TableComponentProps<T> = {
   description: string
   renderRow: (item: T) => React.ReactNode
   data: any[]
-  itemsPerPage?: number
+  scrollContainerRef?: React.RefObject<HTMLDivElement>
+  isFetching?: any
+  loading?: any
+  error?: any
 }
 
 const TableComponent = <T,>({
@@ -27,21 +29,11 @@ const TableComponent = <T,>({
   columns,
   renderRow,
   data,
-  itemsPerPage = 10,
+  scrollContainerRef,
+  isFetching,
+  loading,
+  error,
 }: TableComponentProps<T>) => {
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const totalPages = Math.ceil(data.length / itemsPerPage)
-
-  const paginatedData = data.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  )
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
   return (
     <div className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)]'>
       <Card className='min-h-[calc(100vh-92px)] max-h-[calc(100vh-92px)] overflow-hidden'>
@@ -49,7 +41,10 @@ const TableComponent = <T,>({
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
-        <CardContent className='max-h-[calc(100vh-92px)] overflow-scroll remove-scrollbar pb-24'>
+        <CardContent
+          ref={scrollContainerRef}
+          className='max-h-[calc(100vh-92px)] overflow-scroll remove-scrollbar pb-24'
+        >
           <Table>
             <TableHeader>
               <TableRow>
@@ -61,8 +56,8 @@ const TableComponent = <T,>({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedData.length > 0 ? (
-                paginatedData.map((item) => renderRow(item))
+              {data.length > 0 ? (
+                data.map((item) => renderRow(item))
               ) : (
                 <TableRow>
                   <td
@@ -77,11 +72,12 @@ const TableComponent = <T,>({
           </Table>
         </CardContent>
       </Card>
-      <TablePagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+
+      {isFetching && (
+        <div className='flex items-center justify-center p-1'>
+          <Loader className='animate-spin' />
+        </div>
+      )}
     </div>
   )
 }

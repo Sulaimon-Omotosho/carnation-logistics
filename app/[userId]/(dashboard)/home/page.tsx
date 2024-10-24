@@ -8,18 +8,22 @@ import { invoiceColumns, orders } from '@/constants'
 import { getAllInvoices } from '@/lib/actions/data'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import React, { useEffect, useState } from 'react'
+import { Loader } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const HomePage = () => {
   const [invoices, setInvoices] = useState<Orders[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isFetching, setIsFetching] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const fetchedInvoices = await getAllInvoices()
-
+        const fetchedInvoices = await getAllInvoices(0, 20)
         setInvoices(fetchedInvoices)
       } catch (error) {
         console.error('Error fetching invoices:', error)
@@ -30,6 +34,50 @@ const HomePage = () => {
     }
     fetchInvoices()
   }, [])
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current
+
+    const handleScroll = () => {
+      if (!scrollContainer || isFetching || !hasMore) return
+
+      const scrollTop = scrollContainer.scrollTop
+      const scrollHeight = scrollContainer.scrollHeight
+      const clientHeight = scrollContainer.clientHeight
+
+      if (scrollHeight - scrollTop <= clientHeight + 300) {
+        fetchMoreInvoices()
+      }
+    }
+
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll)
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [invoices, isFetching, hasMore])
+
+  const fetchMoreInvoices = async () => {
+    setIsFetching(true)
+    try {
+      const offset = invoices.length
+      const fetchedInvoices = await getAllInvoices(offset, 10)
+
+      if (fetchedInvoices.length === 0) {
+        setHasMore(false)
+      } else {
+        setInvoices((prevInvoices) => [...prevInvoices, ...fetchedInvoices])
+      }
+    } catch (error) {
+      console.error('Error fetching more invoices:', error)
+    } finally {
+      setIsFetching(false)
+    }
+  }
 
   const renderRow = (item: Orders) => (
     <TableRow>
@@ -82,8 +130,9 @@ const HomePage = () => {
 
   if (loading) {
     return (
-      <div className='text-center text-2xl'>
-        Loading invoices <span className=' animate-ping'>...</span>
+      <div className='text-center text-2xl flex gap-1 items-center justify-center'>
+        Loading Invoices
+        <Loader className='animate-spin' />
       </div>
     )
   }
@@ -105,6 +154,10 @@ const HomePage = () => {
           columns={invoiceColumns}
           renderRow={renderRow}
           data={invoices}
+          scrollContainerRef={scrollContainerRef}
+          isFetching={isFetching}
+          loading={loading}
+          error={error}
         />
       </div>
       {/* RIGHT SIDE  */}

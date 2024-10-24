@@ -132,8 +132,9 @@ const UserPage = ({ params }: { params: { staffId: string } }) => {
 
   if (loading) {
     return (
-      <div className='text-center text-2xl'>
-        Loading User <span className=' animate-ping'>...</span>
+      <div className='text-center text-2xl flex gap-1 items-center justify-center'>
+        Loading User
+        <Loader className='animate-spin' />
       </div>
     )
   }
