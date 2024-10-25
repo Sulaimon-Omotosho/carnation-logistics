@@ -1,6 +1,6 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, UserRole } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from '../auth'
@@ -52,7 +52,6 @@ export const createNewInvoice = async (data: {
       amount: data.amount || '',
       description: data.description || '',
       creatorId: creatorId,
-      // createdBy: creatorId,
     },
     include: {
       createdBy: true,
@@ -60,14 +59,26 @@ export const createNewInvoice = async (data: {
   })
 
   redirect(`${newInvoice.id}`)
-
-  // return { success: true }
 }
 
 // GET ALL INVOICES
-export const getAllInvoices = async (offset = 0, limit = 10) => {
+export const getAllInvoices = async (
+  offset = 0,
+  limit = 10,
+  search?: string
+) => {
+  const whereClause = search
+    ? {
+        OR: [
+          { company: { contains: search, mode: 'insensitive' } },
+          { name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+        ],
+      }
+    : undefined
   try {
     const invoices = await db.invoice.findMany({
+      where: whereClause as any,
       skip: offset,
       take: limit,
       orderBy: {
@@ -167,9 +178,29 @@ export const updateInvoice = async ({
 }
 
 // GET ALL USERS
-export const getAllUsers = async (): Promise<Users[]> => {
+export const getAllUsers = async (search?: string): Promise<Users[]> => {
+  // const roleSearch = Object.values(UserRole).includes(search as UserRole)
+  //   ? { role: { equals: search as UserRole } }
+  //   : {}
+
+  const whereClause = search
+    ? {
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+          // {
+          //   role: {
+          //     equals: search.toUpperCase() as 'USER' | 'ADMIN' | 'SUPERVISOR',
+          //   },
+          // },
+          // roleSearch,
+        ].filter(Boolean),
+      }
+    : undefined
+
   try {
     const users = await db.user.findMany({
+      where: whereClause as any,
       orderBy: {
         name: 'asc',
       },

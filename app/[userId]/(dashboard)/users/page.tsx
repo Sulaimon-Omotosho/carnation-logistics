@@ -1,6 +1,7 @@
 'use client'
 
 import TableComponent from '@/components/dashboard/Table'
+import Search from '@/components/Search'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
@@ -8,15 +9,21 @@ import { usersColumns } from '@/constants'
 import { getAllUsers } from '@/lib/actions/data'
 import { Users } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { CirclePlus, CircleUserRound, Loader } from 'lucide-react'
+import { CirclePlus, CircleUserRound } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
-const UsersPage = () => {
+const UsersPage = ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined }
+}) => {
   const { data: session } = useSession()
   const userId = session?.user.id
+
+  const search: any = searchParams.search || ''
 
   const [users, setUsers] = useState<Users[]>([])
   const [loading, setLoading] = useState(true)
@@ -25,8 +32,7 @@ const UsersPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const fetchedUsers: Users[] = await getAllUsers()
-
+        const fetchedUsers: Users[] = await getAllUsers(search)
         setUsers(fetchedUsers)
       } catch (error) {
         console.error('Error fetching users:', error)
@@ -37,7 +43,7 @@ const UsersPage = () => {
     }
 
     fetchUsers()
-  }, [])
+  }, [search])
 
   const renderRow = (items: Users) => (
     <TableRow>
@@ -96,27 +102,19 @@ const UsersPage = () => {
     </TableRow>
   )
 
-  if (loading) {
-    return (
-      <div className='text-center text-2xl flex gap-1 items-center justify-center'>
-        Loading Users
-        <Loader className='animate-spin' />
-      </div>
-    )
-  }
-
-  if (error) {
-    return <div className='text-center text-2xl'>{error}</div>
-  }
-
   return (
     <div className='relative'>
+      <div className='absolute w-[50%] top-8 right-[30%]'>
+        <Search />
+      </div>
       <TableComponent
         title='Users'
         description='List of users'
         columns={usersColumns}
         renderRow={renderRow}
         data={users}
+        loading={loading}
+        error={error}
       />
       <div className='absolute top-7 right-5 md:right-12'>
         {session?.user.role === 'ADMIN' ? (

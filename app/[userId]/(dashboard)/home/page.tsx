@@ -8,7 +8,6 @@ import { invoiceColumns, orders } from '@/constants'
 import { getAllInvoices } from '@/lib/actions/data'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { Loader } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 
 const HomePage = () => {
@@ -127,19 +126,6 @@ const HomePage = () => {
       </TableCell>
     </TableRow>
   )
-
-  if (loading) {
-    return (
-      <div className='text-center text-2xl flex gap-1 items-center justify-center'>
-        Loading Invoices
-        <Loader className='animate-spin' />
-      </div>
-    )
-  }
-
-  if (error) {
-    return <div className='text-center text-2xl'>{error}</div>
-  }
 
   return (
     <div

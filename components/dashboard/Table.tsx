@@ -45,31 +45,44 @@ const TableComponent = <T,>({
           ref={scrollContainerRef}
           className='max-h-[calc(100vh-92px)] overflow-scroll remove-scrollbar pb-24'
         >
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {columns.map((col) => (
-                  <TableHead key={col.accessor} className={col.className}>
-                    {col.header}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.length > 0 ? (
-                data.map((item) => renderRow(item))
-              ) : (
+          {loading ? (
+            <div className='text-2xl flex gap-1 items-center justify-center h-[calc(100vh-192px)]'>
+              <p className=' flex gap-1 items-center justify-center h-full'>
+                Loading {title}
+                <Loader className='animate-spin' />
+              </p>
+            </div>
+          ) : error ? (
+            <div className='text-center flex justify-center items-center text-2xl'>
+              {error}
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <td
-                    colSpan={columns.length}
-                    className='text-center p-4 text-2xl'
-                  >
-                    No data available.
-                  </td>
+                  {columns.map((col) => (
+                    <TableHead key={col.accessor} className={col.className}>
+                      {col.header}
+                    </TableHead>
+                  ))}
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data.length > 0 ? (
+                  data.map((item) => renderRow(item))
+                ) : (
+                  <TableRow>
+                    <td
+                      colSpan={columns.length}
+                      className='text-center p-4 text-2xl'
+                    >
+                      No data available.
+                    </td>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
