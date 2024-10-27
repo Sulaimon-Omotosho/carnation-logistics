@@ -158,7 +158,7 @@ const InvoicesPage = ({ searchParams }: { searchParams: string }) => {
 
   return (
     <div className='relative'>
-      <div className='absolute w-[50%] top-8 right-[30%]'>
+      <div className='absolute w-[90%] md:w-[50%] top-[67px] md:top-8 right-[5%] md:right-[30%]'>
         <Search />
       </div>
       <TableComponent
