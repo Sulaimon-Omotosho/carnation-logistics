@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import React from 'react'
+import Print from './print/page'
+import PrintInvoice from '@/components/PrintInvoice'
 
 const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   const invoiceId = params.invoiceId
@@ -39,7 +41,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
             {invoice.status}
           </Badge>
         </div>
-        <div className='flex flex-col md:flex-row gap-3 items-center'>
+        <div className='flex flex-col md:flex-row gap-1 items-center'>
           {invoice.status === 'IN_PROGRESS' ||
           invoice.status === 'FULFILLED' ? (
             <p className='flex gap-2 items-center justify-center text-xl font-bold'>
@@ -66,6 +68,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
               )}
             </div>
           )}
+          <PrintInvoice invoice={invoice} />
         </div>
       </div>
       <p className='text-3xl mb-3'>

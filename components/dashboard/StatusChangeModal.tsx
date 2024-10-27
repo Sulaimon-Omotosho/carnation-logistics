@@ -16,7 +16,7 @@ export const ChangeStatusModal = ({
           <h3 className='text-xl font-semibold'>{title}</h3>
           <button onClick={onClose}>X</button>
         </div>
-        <div className='mt-4'>{children}</div>
+        <div className='mt-4 overflow-hidden'>{children}</div>
       </div>
     </div>
   )

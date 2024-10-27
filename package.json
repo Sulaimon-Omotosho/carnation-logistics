@@ -23,6 +23,8 @@
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.5.1",
     "clsx": "^2.1.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.452.0",
     "mongodb": "^6.9.0",
