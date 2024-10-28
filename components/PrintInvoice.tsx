@@ -251,7 +251,15 @@ const PrintInvoice = ({ invoice }: any) => {
                     }}
                   >
                     <p style={{ width: '50%', marginBottom: '0' }}>
-                      {invoice.product}
+                      {invoice.product ? (
+                        <p className=''>{invoice.product}</p>
+                      ) : (
+                        <div style={{ display: 'flex', gap: '0.2rem' }}>
+                          {invoice.from}
+                          <span>To</span>
+                          {invoice.to}
+                        </div>
+                      )}
                     </p>
                     <p style={{ width: '25%', marginBottom: '0' }}>590 KM</p>
                     <p
