@@ -32,7 +32,7 @@ const InvoicesPage = ({ searchParams }: { searchParams: string }) => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const fetchedInvoices = await getAllInvoices(0, 10, search)
+        const fetchedInvoices = await getAllInvoices(0, 20, search)
         setInvoices(fetchedInvoices!)
         setHasMore(fetchedInvoices!.length === 10)
       } catch (error) {
