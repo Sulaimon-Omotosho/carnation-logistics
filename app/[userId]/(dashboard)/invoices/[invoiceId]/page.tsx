@@ -12,14 +12,21 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   const invoiceId = params.invoiceId
   const session = await getServerSession(authOptions)
   const invoice = await getInvoice(invoiceId)
-  const createdBy = await getUser(invoice!.creatorId)
-  const cancelledBy = await getUser(invoice!.cancelledBy!)
-  const deliveryVerifiedBy = await getUser(invoice!.deliveryVerifiedBy!)
-  const paymentVerifiedBy = await getUser(invoice!.paymentVerifiedBy!)
 
   if (!invoice) {
     return <p className='text-2xl text-center'>Invoice not found</p>
   }
+
+  const createdBy = await getUser(invoice.creatorId)
+  const cancelledBy = invoice.cancelledBy
+    ? await getUser(invoice.cancelledBy)
+    : null
+  const deliveryVerifiedBy = invoice.deliveryVerifiedBy
+    ? await getUser(invoice.deliveryVerifiedBy)
+    : null
+  const paymentVerifiedBy = invoice.paymentVerifiedBy
+    ? await getUser(invoice.paymentVerifiedBy)
+    : null
 
   return (
     <main className='min-h-[calc(100vh-56px)] max-h-[calc(100vh-56px)] px-2 pb-5 md:px-10 lg:px-24 pt-10 md:pt-20 overflow-scroll remove-scrollbar'>
@@ -156,13 +163,13 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Created By
               </strong>
-              <span>{createdBy.name} </span>
+              <span>{createdBy?.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm text-red-600'>
                 Cancelled By
               </strong>
-              <span>{cancelledBy.name} </span>
+              <span>{cancelledBy?.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
@@ -180,19 +187,19 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Created By
               </strong>
-              <span>{createdBy.name} </span>
+              <span>{createdBy?.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Payment Verified
               </strong>
-              <span>{paymentVerifiedBy.name} </span>
+              <span>{paymentVerifiedBy?.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Delivery Verified
               </strong>
-              <span>{deliveryVerifiedBy.name} </span>
+              <span>{deliveryVerifiedBy?.name} </span>
             </li>
           </ul>
         </>
@@ -203,7 +210,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
             <strong className='block w-28 flex-shrink-0 font-medium text-sm '>
               Once Cancelled By
             </strong>
-            <span className=''>{cancelledBy.name} </span>
+            <span className=''>{cancelledBy?.name} </span>
           </div>
         ))}
     </main>

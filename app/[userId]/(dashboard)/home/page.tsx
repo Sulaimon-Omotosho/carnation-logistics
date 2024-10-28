@@ -145,7 +145,7 @@ const HomePage = () => {
       {/* LEFT SIDE  */}
       <div className='w-full lg:w-2/3 flex flex-col gap-8'>
         <TableComponent
-          title='Invoices'
+          title='Home'
           description='Recent invoices'
           columns={invoiceColumns}
           renderRow={renderRow}
