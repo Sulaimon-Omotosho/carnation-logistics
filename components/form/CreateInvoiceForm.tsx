@@ -31,25 +31,24 @@ const CreateInvoiceForm = () => {
       ...data,
       date:
         data.date instanceof Date ? data.date.toISOString() : String(data.date),
-      amount: data.amount.toString(), // Convert number to string
+      amount: data.amount.toString(),
     }
 
     try {
+      //     console.log(formattedData)
       const response = await createNewInvoice(formattedData)
     } catch (error) {
       console.error('Creating new invoice error:', error)
-      throw error
+      alert(error)
+      // throw error
     } finally {
       setIsLoading(false)
     }
-
-    // Handle the form submission
   }
 
   return (
     <Form {...form}>
       <form
-        // action={createNewInvoice}
         onSubmit={form.handleSubmit(onSubmit)}
         className='space-y-4 max-w-[400px] pb-10'
       >
@@ -112,7 +111,7 @@ const CreateInvoiceForm = () => {
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name='address'
-            label='Address'
+            label='Delivery Address'
             placeholder='Delivery Address'
           />
           {error && (
@@ -120,15 +119,25 @@ const CreateInvoiceForm = () => {
           )}
         </div>
         <div className='relative'>
-          <CustomFormField
-            fieldType={FormFieldType.INPUT}
-            control={form.control}
-            name='product'
-            label='Product'
-            placeholder='From & To'
-            iconSrc=''
-            iconAlt='email'
-          />
+          <p className=' text-sm font-semibold pb-2'>Product</p>
+          <div className='flex gap-4'>
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name='from'
+              // label='From'
+              placeholder='From'
+              className=' text-center'
+            />
+            <CustomFormField
+              fieldType={FormFieldType.INPUT}
+              control={form.control}
+              name='to'
+              // label='To'
+              placeholder='To'
+              className=' text-center'
+            />
+          </div>
           {error && (
             <p className='text-red-500 text-center absolute pl-10'>{error}</p>
           )}

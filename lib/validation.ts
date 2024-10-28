@@ -53,8 +53,11 @@ export const InvoiceFormValidation = z.object({
     .min(14, 'Invalid phone number')
     .refine((phone) => /^\+\d{10,15}$/.test(phone), 'Invalid phone number'),
   address: z.string().min(20, 'add delivery address'),
-  product: z.string().min(6, 'Add delivery states to and fro'),
-  date: z.coerce.date(),
+  from: z.string().min(3, 'Add the take-off state'),
+  to: z.string().min(3, 'Add the delivery state'),
+  date: z.coerce.date().refine((date) => date >= new Date(), {
+    message: 'Date cannot be in the past',
+  }),
   // amount: z.string().min(5, 'Add amount'),
   amount: z.preprocess(
     (value) => parseFloat(value as string),

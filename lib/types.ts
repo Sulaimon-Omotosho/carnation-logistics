@@ -11,7 +11,9 @@ export interface Orders {
   email?: string
   phone?: string
   address?: string
-  product: string
+  product: string | null
+  from: string | null
+  to: string | null
   status: string
   date: string
   amount: number

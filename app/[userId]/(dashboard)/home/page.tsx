@@ -4,7 +4,7 @@ import OrderCalendar from '@/components/dashboard/OrderCalender'
 import TableComponent from '@/components/dashboard/Table'
 import { Badge } from '@/components/ui/badge'
 import { TableCell, TableRow } from '@/components/ui/table'
-import { invoiceColumns, orders } from '@/constants'
+import { invoiceColumns } from '@/constants'
 import { getAllInvoices } from '@/lib/actions/data'
 import { Orders } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -100,7 +100,17 @@ const HomePage = () => {
           </div>
         </div>
       </TableCell>
-      <TableCell className='hidden sm:table-cell'>{item.product}</TableCell>
+      <TableCell className='hidden sm:table-cell'>
+        {item.product ? (
+          <p>{item.product}</p>
+        ) : (
+          <p className='flex gap-2'>
+            <span>{item.from} </span>
+            To
+            <span>{item.to} </span>
+          </p>
+        )}
+      </TableCell>
       <TableCell className='hidden sm:table-cell'>
         <Badge
           className={cn('text-sm capitalize', {

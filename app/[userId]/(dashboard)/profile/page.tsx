@@ -93,9 +93,19 @@ const ProfilePage = () => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
-          {item.product}
-        </Link>
+        {item.product ? (
+          <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
+            {item.product}
+          </Link>
+        ) : (
+          <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
+            <p className='flex gap-1'>
+              <span>{item.from} </span>
+              To
+              <span>{item.to} </span>
+            </p>
+          </Link>
+        )}
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
         <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>

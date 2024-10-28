@@ -1,19 +1,21 @@
 import ChangeStatusMenu from '@/components/dashboard/ChangeStatusMenu'
 import { Badge } from '@/components/ui/badge'
-import { getInvoice } from '@/lib/actions/data'
+import { getInvoice, getUser } from '@/lib/actions/data'
 import { authOptions } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import React from 'react'
-import Print from './print/page'
 import PrintInvoice from '@/components/PrintInvoice'
 
 const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   const invoiceId = params.invoiceId
   const session = await getServerSession(authOptions)
-
   const invoice = await getInvoice(invoiceId)
+  const createdBy = await getUser(invoice?.creatorId!)
+  const cancelledBy = await getUser(invoice?.cancelledBy!)
+  const deliveryVerifiedBy = await getUser(invoice?.deliveryVerifiedBy!)
+  const paymentVerifiedBy = await getUser(invoice?.paymentVerifiedBy!)
 
   if (!invoice) {
     return <p className='text-2xl text-center'>Invoice not found</p>
@@ -120,7 +122,15 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
             Billing Product
           </strong>
-          <span>{invoice.product} </span>
+          {invoice.product ? (
+            <span>{invoice.product} </span>
+          ) : (
+            <p className='flex gap-1'>
+              <span>{invoice.from} </span>
+              To
+              <span>{invoice.to} </span>
+            </p>
+          )}
         </li>
         <li className='flex gap-4'>
           <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
@@ -146,13 +156,13 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Created By
               </strong>
-              <span>{invoice.creatorId} </span>
+              <span>{createdBy.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm text-red-600'>
                 Cancelled By
               </strong>
-              <span>{invoice.cancelledBy} </span>
+              <span>{cancelledBy.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
@@ -170,19 +180,19 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Created By
               </strong>
-              <span>{invoice.creatorId} </span>
+              <span>{createdBy.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Payment Verified
               </strong>
-              <span>{invoice.paymentVerifiedBy} </span>
+              <span>{paymentVerifiedBy.name} </span>
             </li>
             <li className='flex gap-4'>
               <strong className='block w-28 flex-shrink-0 font-medium text-sm'>
                 Delivery Verified
               </strong>
-              <span>{invoice.deliveryVerifiedBy} </span>
+              <span>{deliveryVerifiedBy.name} </span>
             </li>
           </ul>
         </>
@@ -193,7 +203,7 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
             <strong className='block w-28 flex-shrink-0 font-medium text-sm '>
               Once Cancelled By
             </strong>
-            <span className=''>{invoice.cancelledBy} </span>
+            <span className=''>{cancelledBy.name} </span>
           </div>
         ))}
     </main>

@@ -23,7 +23,8 @@ export const createNewInvoice = async (data: {
   email: string
   phone: string
   address: string
-  product: string
+  from: string
+  to: string
   date: string
   amount: string
   description: string
@@ -31,7 +32,7 @@ export const createNewInvoice = async (data: {
   const session = await getServerSession(authOptions)
 
   if (!session || !session?.user.id) {
-    return { error: 'User not authenticated' }
+    throw new Error('You are not authenticated')
   }
 
   const creatorId = session.user.id!
@@ -47,7 +48,8 @@ export const createNewInvoice = async (data: {
       email: data.email.toLowerCase() || '',
       phone: data.phone || '',
       address: data.address || '',
-      product: data.product || '',
+      from: data.from || '',
+      to: data.to || '',
       date: data.date || new Date().toISOString(),
       amount: data.amount || '',
       description: data.description || '',
@@ -67,6 +69,12 @@ export const getAllInvoices = async (
   limit = 10,
   search?: string
 ) => {
+  const session = await getServerSession(authOptions)
+
+  if (!session || !session?.user.id) {
+    throw new Error('You are not authenticated')
+  }
+
   const whereClause = search
     ? {
         OR: [
@@ -182,6 +190,11 @@ export const getAllUsers = async (search?: string): Promise<Users[]> => {
   // const roleSearch = Object.values(UserRole).includes(search as UserRole)
   //   ? { role: { equals: search as UserRole } }
   //   : {}
+  const session = await getServerSession(authOptions)
+
+  if (!session || !session?.user.id) {
+    throw new Error('You are not authenticated')
+  }
 
   const whereClause = search
     ? {
@@ -217,6 +230,12 @@ export const getAllUsers = async (search?: string): Promise<Users[]> => {
 
 // GET A USER
 export const getUser = async (staffId: string): Promise<Users> => {
+  const session = await getServerSession(authOptions)
+
+  if (!session || !session?.user.id) {
+    throw new Error('You are not authenticated')
+  }
+
   const id = staffId
   try {
     const user = await db.user.findUnique({
@@ -239,6 +258,13 @@ export const getUser = async (staffId: string): Promise<Users> => {
 // GET ALL USER INVOICES
 export const usersInvoices = async (staffId: string) => {
   const id = staffId
+
+  const session = await getServerSession(authOptions)
+
+  if (!session || !session?.user.id) {
+    throw new Error('You are not authenticated')
+  }
+
   try {
     const userInvoices = await db.invoice.findMany({
       where: {

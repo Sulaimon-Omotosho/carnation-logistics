@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { CirclePlus } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
 
 const InvoicesPage = ({ searchParams }: { searchParams: string }) => {
@@ -32,8 +33,8 @@ const InvoicesPage = ({ searchParams }: { searchParams: string }) => {
     const fetchInvoices = async () => {
       try {
         const fetchedInvoices = await getAllInvoices(0, 10, search)
-        setInvoices(fetchedInvoices)
-        setHasMore(fetchedInvoices.length === 10)
+        setInvoices(fetchedInvoices!)
+        setHasMore(fetchedInvoices!.length === 10)
       } catch (error) {
         console.error('Error fetching invoices:', error)
         setError('Failed to load invoices')
@@ -76,10 +77,10 @@ const InvoicesPage = ({ searchParams }: { searchParams: string }) => {
       const offset = invoices.length
       const fetchedInvoices = await getAllInvoices(offset, 10, search)
 
-      if (fetchedInvoices.length === 0) {
+      if (fetchedInvoices!.length === 0) {
         setHasMore(false)
       } else {
-        setInvoices((prevInvoices) => [...prevInvoices, ...fetchedInvoices])
+        setInvoices((prevInvoices) => [...prevInvoices, ...fetchedInvoices!])
       }
     } catch (error) {
       console.error('Error fetching more invoices:', error)
@@ -120,9 +121,19 @@ const InvoicesPage = ({ searchParams }: { searchParams: string }) => {
         </Link>
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
-        <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
-          {item.product}
-        </Link>
+        {item.product ? (
+          <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
+            {item.product}
+          </Link>
+        ) : (
+          <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>
+            <p className='flex gap-1'>
+              <span>{item.from} </span>
+              To
+              <span>{item.to} </span>
+            </p>
+          </Link>
+        )}
       </TableCell>
       <TableCell className='hidden sm:table-cell p-0'>
         <Link href={`/${userId}/invoices/${item.id}`} className='block p-4'>

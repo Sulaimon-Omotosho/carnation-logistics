@@ -28,7 +28,9 @@ model Invoice {
   email     String
   phone     String
   address     String
-  product     String
+  product     String?
+  from     String?
+  to     String?
   date     String
   amount     String
   description     String
