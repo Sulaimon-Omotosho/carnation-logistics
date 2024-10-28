@@ -12,10 +12,10 @@ const InvoicePage = async ({ params }: { params: { invoiceId: string } }) => {
   const invoiceId = params.invoiceId
   const session = await getServerSession(authOptions)
   const invoice = await getInvoice(invoiceId)
-  const createdBy = await getUser(invoice?.creatorId!)
-  const cancelledBy = await getUser(invoice?.cancelledBy!)
-  const deliveryVerifiedBy = await getUser(invoice?.deliveryVerifiedBy!)
-  const paymentVerifiedBy = await getUser(invoice?.paymentVerifiedBy!)
+  const createdBy = await getUser(invoice!.creatorId)
+  const cancelledBy = await getUser(invoice!.cancelledBy!)
+  const deliveryVerifiedBy = await getUser(invoice!.deliveryVerifiedBy!)
+  const paymentVerifiedBy = await getUser(invoice!.paymentVerifiedBy!)
 
   if (!invoice) {
     return <p className='text-2xl text-center'>Invoice not found</p>
